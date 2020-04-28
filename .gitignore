@@ -1,7 +1,9 @@
+src/
+node_modules/
 # OSX
 #
 .DS_Store
-src/
+
 # Xcode
 #
 build/
@@ -31,7 +33,6 @@ local.properties
 
 # node.js
 #
-node_modules/
 npm-debug.log
 yarn-error.log
 

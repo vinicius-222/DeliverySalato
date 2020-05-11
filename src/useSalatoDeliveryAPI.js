@@ -1,6 +1,9 @@
 import qs from 'qs';
 import { StackActions, NavigationActions } from 'react-navigation';
 import { SignOut } from './helpers/AuthHandler';
+import Geocoder from 'react-native-geocoding';
+import Geolocation from '@react-native-community/geolocation';
+import { MapsAPI } from './config';
 
 //const URL = 'http://192.168.1.65';
 const URL = 'http://138.99.15.234:20003';
@@ -434,17 +437,13 @@ const useSalatoDeliveryAPI = (props) => ({
         return json;
     },
 
-    getFormaDePagamento:async () =>{
-        return new Promise((resolve, reject) =>{
-            setTimeout(()=>{
-                let json = {ListFormaDePagamento:[
-                    {IdFormaDePagamento:1, NmFormaDePagamento:'Cartao de Credito' , url:'https://b2egroup.com.br/wp-content/uploads/2019/02/WhatsApp-Image-2019-02-01-at-14.29.23.jpeg'},
-                    {IdFormaDePagamento:2, NmFormaDePagamento:'Dinheiro',  url:'https://empreendadentista.com.br/wp-content/uploads/2016/01/formas-de-pagamento.png'},
-                    {IdFormaDePagamento:3, NmFormaDePagamento:'Motoboy com maquina',  url:'https://blog.drivetrue.com.br/wp-content/uploads/2017/11/147641-servico-de-entregas-5-dicas-para-lidar-com-motoboys.jpg'}
-                ]};
-                resolve(json);
-            },1000)
-        })
+    getFormaDePagamento:async (jwt, hash) =>{
+       const json = await apiFetchGet(
+            '/pedidos/getFormaPagamento',
+            {jwt,hash},
+            props
+       )
+       return json;
     },
 
     getUsuario:async (jwt, hash) => {
@@ -463,6 +462,25 @@ const useSalatoDeliveryAPI = (props) => ({
             props
         )
         return json;
+    },
+
+    getCurrentLocation:async()=>{
+        return new Promise((resolve, reject)=>{
+            Geocoder.init(MapsAPI, {language:'pt-br'});
+            Geolocation.getCurrentPosition(async(info) => {
+                const geo = await Geocoder.from(info.coords.latitude, info.coords.longitude);
+                const numero = geo.results[0].address_components[0].long_name;
+                const Logradouro = geo.results[0].address_components[1].long_name;
+                const Bairro = geo.results[0].address_components[2].long_name;
+                const Cidade = geo.results[0].address_components[3].long_name;
+                const UF = geo.results[0].address_components[4].short_name;
+                const Pais = geo.results[0].address_components[5].short_name;
+                const CEP = geo.results[0].address_components[6].short_name;
+                const EnderecoActivo = `${Logradouro}, ${numero} - ${Bairro} , ${Cidade} / ${UF} - CEP:${CEP}`;
+
+                resolve([Logradouro, numero, Bairro, Cidade, UF, CEP]);
+            })
+        })
     }
     
 });

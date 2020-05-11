@@ -18,14 +18,16 @@ import {
     BodyFormaDePagamentoSubTotalArea,
     BodyFormaDePagamentoSubTotalText,
     BodyFormaDePagamentoTrocoText,
-    BodyFormaDePagamentoTrocolArea
+    BodyFormaDePagamentoTrocolArea,
+    BottomActionContinuar,
+    BottomActionText
 } from './styled';
 
 const Pagamento = (props) =>{
     const Api = useSalatoDeliveryAPI(props);
     const ListFormaDePagamentoRef = useRef();
     const [ListFormaDePagamento, setListFormaDePagamento] = useState([]);
-    const [active, setActive] = useState('2');
+    const [active, setActive] = useState('1');
     const [troco, setTroco] = useState('');
    
     const getFormadePagamento = () =>{
@@ -44,7 +46,7 @@ const Pagamento = (props) =>{
         if (r < 0 ){
             r = 0;
         }
-        return parseFloat(r).toFixed(2)
+        return parseFloat(r).toFixed(2) 
     }
     useEffect(()=>{
         getFormadePagamento();
@@ -52,7 +54,6 @@ const Pagamento = (props) =>{
     return(
         <Safe>
             <Container>
-                <HeaderTitle>Formas de Pagamento</HeaderTitle>
                 <HeaderFormaDePagamento
                     ref={ListFormaDePagamentoRef}
                     horizontal={true}
@@ -60,11 +61,13 @@ const Pagamento = (props) =>{
                     decelerationRate="fast"
                 >
                     {ListFormaDePagamento.map((i,k)=>(
-                        <HeaderFormaDePagamentoArea active={i.IdFormaDePagamento == active} key={k} >
-                            <HeaderFormaDePagamentoButton onPress={()=>setActive(i.IdFormaDePagamento)} underlayColor="transparent">
-                                <Imagem source={{uri:i.url}}/>
+                        <HeaderFormaDePagamentoArea active={i.IdFormaPagamento == active} key={k} >
+                            <HeaderFormaDePagamentoButton onPress={()=>setActive(i.IdFormaPagamento)} underlayColor="transparent">
+                                <>
+                                    <Imagem source={{uri:i.url}}/>
+                                    <HeaderFormaDePagamentoTitle active={i.IdFormaPagamento == active}>{i.DsFormaPagamento}</HeaderFormaDePagamentoTitle>
+                                </>
                             </HeaderFormaDePagamentoButton>
-                            <HeaderFormaDePagamentoTitle active={i.IdFormaDePagamento == active}>{i.NmFormaDePagamento}</HeaderFormaDePagamentoTitle>
                         </HeaderFormaDePagamentoArea>
                         
                     ))}
@@ -82,7 +85,7 @@ const Pagamento = (props) =>{
                         <BodyFormaDePagamentoSubTotalText>Total </BodyFormaDePagamentoSubTotalText>
                         <BodyFormaDePagamentoSubTotal>R$ {parseFloat(props.VlTotalProduto + 5).toFixed(2)}</BodyFormaDePagamentoSubTotal>
                     </BodyFormaDePagamentoSubTotalArea>
-                    {active == 2 &&
+                    {active == 1 &&
                     <>
                         <BodyFormaDePagamentoSubTotalArea>
                             <BodyFormaDePagamentoSubTotalText>Troco para </BodyFormaDePagamentoSubTotalText>
@@ -99,6 +102,9 @@ const Pagamento = (props) =>{
                     </>
                     }
                 </BodyFormaDePagamentoArea>
+                <BottomActionContinuar>
+                    <BottomActionText>Finalizar Compra</BottomActionText>    
+                </BottomActionContinuar>
             </Container>
         </Safe>
     )

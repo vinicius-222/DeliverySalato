@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import Loading from '../../components/Loading';
+import BalonCaution from '../../components/BalonCaution';
 import DatePicker from 'react-native-datepicker';
 import AddressModal from '../../components/Address/AddressModal';
 import Geocoder from 'react-native-geocoding';
@@ -52,7 +53,10 @@ import {
     HeaderEnderecoTpEntregaText,
     HeaderAgendamentoArea,
     StAgendamento,
-    AreaSangriaAgendamento
+    AreaSangriaAgendamento,
+    HeaderEnderecoBalon,
+    HeaderEnderecoBalonTriangle,
+    HeaderEnderecoBalonTriangleText
 } from './styled';
 
 let Timer;
@@ -64,6 +68,7 @@ const CarCompra = (props) =>{
     const [stLoading, setStLoading] = useState(true);
     const [activeAgendamento, setactiveAgendamento] = useState(false);
     const [activeButton, setactiveButton] = useState('Entrega');
+    const [visibleBalon, setVisibleBalon] = useState(false);
 
     const [modalTitle, setModalTitle] = useState('digite seu endereco');
     const [modalVisible, setModalVisible] = useState(false);
@@ -71,7 +76,8 @@ const CarCompra = (props) =>{
     const [date, setDate] = useState(moment());
 
     const handleModalClick = (field, item) => {
-        props.setEndereco(item)
+        setVisibleBalon(field);
+        props.setEndereco(item);
         setModalVisible(false)
     }
 
@@ -88,9 +94,12 @@ const CarCompra = (props) =>{
     }
 
     const getFormadePagamento = async() =>{
-        const json = await api.getFormaDePagamento();
+        const json = await api.getFormaDePagamento(
+            props.jwt,
+            props.hash
+        );
         if (!json.error){
-            props.setListFormaDePagamento(json.ListFormaDePagamento);
+            props.setListFormaDePagamento(json.FormaPagamento);
         }
     }
 
@@ -210,7 +219,6 @@ const CarCompra = (props) =>{
 
     useEffect(() => {
         getFormadePagamento();
-        
     },[])
 
     return(
@@ -234,11 +242,13 @@ const CarCompra = (props) =>{
                         visible={modalVisible}
                         visibleAction={setModalVisible}
                         clickAction={handleModalClick}
+                        visibleBalon={setVisibleBalon}
                     />
                     <HeaderEnderecoTpEntregaText>{props.TpEntrega}</HeaderEnderecoTpEntregaText>
                     {props.TpEntrega == 'Entrega' &&
                         <HeaderEnderecoAreaItem>
                             <HeaderEnderecoArea> 
+                                <BalonCaution active={visibleBalon}/>
                                 <HeaderEnderecoTextInput>{props.Endereco}</HeaderEnderecoTextInput>
                             </HeaderEnderecoArea>
                             <HeaderEnderecoAction onPress={()=>handleCurrentLocation()} underlayColor="transparent" >
@@ -307,11 +317,9 @@ const CarCompra = (props) =>{
                     </Container>
                 ))}
                 <BottomActionContinuar onPress={()=>{
-                    console.log(props.RouteName);
-                    props.navigation.navigate('SearchStack')}
-                    
+                    props.navigation.navigate('Pagamento')}
                     }>
-                    <BottomActionText>Continuar Comprando</BottomActionText>
+                    <BottomActionText>Pagar agora</BottomActionText>
                 </BottomActionContinuar>
             </ScrolArea>
             {stLoading &&
@@ -325,8 +333,8 @@ CarCompra.navigationOptions = ({navigation}) =>{
     return{
         headerShown:true,
         headerTitle:'Carrinho',
-        headerRight:<ButtonActionPagamento onPress={()=>navigation.navigate('Pagamento')} underlayColor="transparent">
-                        <TextoActionPagamento>Pagamento ></TextoActionPagamento>
+        headerLeft:<ButtonActionPagamento onPress={()=>navigation.navigate('SearchStack')} underlayColor="transparent">
+                        <TextoActionPagamento>Comprar mais</TextoActionPagamento>
                     </ButtonActionPagamento>
     }
 }

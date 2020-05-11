@@ -103,6 +103,40 @@ export const HeaderEnderecoArea = styled.View`
 export const HeaderEnderecoTextInput = styled.Text`
 
 `;
+export const HeaderEnderecoBalon = styled.View`
+    display:${props=>props.active ? 'flex' : 'none'}
+    background-color:#FFF;
+    position:absolute;
+    border-radius:5px;
+    top:-55px;
+    right:-52px;
+    border:0.7px solid #CCC;
+    width:300px;
+    height:40px;
+    z-index:0;
+`;
+export const HeaderEnderecoBalonTriangle = styled.View`
+    background-color:transparent;
+    position:absolute;
+    top:37px;
+    right:5px;
+    width:0;
+    height:0;
+    border-top-width:15;
+    border-top-color:#FFF;
+    border-left-color:transparent;
+    border-left-width:15;
+    border-right-width:15;
+    border-right-color:transparent;
+    z-index:0;
+`;
+
+export const HeaderEnderecoBalonTriangleText = styled.Text`
+
+    color:#000;
+    font-size:12px;
+    z-index:1;
+`;
 
 export const HeaderEnderecoText = styled.Text`
 

@@ -261,7 +261,19 @@ const InsertAddressModal = (props) => {
             }
         },1000)
 
-    },[CEPEndereco])
+    },[CEPEndereco]);
+
+    useEffect(()=>{
+        if (props.StGeolocation){
+            setDsLogradouro(props.data[0]);
+            setNrNumero(props.data[1]);
+            setDsBairro(props.data[2]);
+            setDsCidade(props.data[3]);
+            setDsCEP(props.data[5]);
+            setCdUF(props.data[4]);
+
+        }
+    },[props.StGeolocation])
 
     const LimpaCampos = () =>{ 
         setTpEndereco('')

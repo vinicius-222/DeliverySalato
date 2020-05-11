@@ -16,7 +16,7 @@ import {
     Logo,
     Texto
 } from './styled';
-
+ 
 const BASE = BASEAPIIMAGE;
 const screenWidth = Math.round(Dimensions.get('window').width);
 let thirdW = screenWidth / 1;
@@ -24,7 +24,7 @@ let thirdW = screenWidth / 1;
 const Home = (props) =>{
     const api = useSalatoDeliveryAPI(props);
     const MonthRef = useRef();
-    const[ProductsInfo, setProductsInfo] = useState('Teste');
+    const [ProductsInfo, setProductsInfo] = useState('Teste');
     const [selectedMonth, setSelectedMonth] = useState();
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -32,7 +32,9 @@ const Home = (props) =>{
         let posX = e.nativeEvent.contentOffset.x;
         let targetMonth = Math.round( posX / thirdW );
         setSelectedMonth(targetMonth);
-    }
+    }  
+
+
     
     const scrollToMonth = (m) => {
         let posX = m * thirdW;
@@ -81,12 +83,35 @@ const Home = (props) =>{
         props.setListCategory(r.GrupoProduto);
     }
 
+    const location = async () =>{
+        const geo = await api.getCurrentLocation();
+        props.setGeoLocation(geo);
+    }
+
+    const getMeusEnderecos = async () => {
+        const json = await api.getEndereco(
+            props.jwt
+        )
+        props.setMeusEnderecos(json.InfoEndereco);
+
+        let key = json.InfoEndereco.findIndex((item)=> item.StEntrega == 1);
+
+        if (key > -1){
+            let item = json.InfoEndereco[key];
+            let DsEndereco = `${item.DsLogradouro}, ${item.NrNumero} - ${item.DsBairro} , ${item.DsCidade} / ${item.CdUF} - CEP:${item.DsCEP}`;
+            props.setEnderecoAtivo(DsEndereco);
+        }
+
+    }
+
     useEffect(() =>{ 
         getCountCar();
         getCarrCompra();
         handleGetCategoria();
         getInfoProduto();
         getInfoUsuario();
+        location();
+        getMeusEnderecos();
     },[])
 
     return(
@@ -135,6 +160,9 @@ const mapStateToProps = (state) => {
  
 const mapDispatchToProps = (dispatch) =>{
     return{
+        setGeoLocation:(GeoEndereco)=>dispatch({type:'SET_GEOENDERECO', payload:{GeoEndereco}}),
+        setMeusEnderecos:(MeusEnderecos)=>dispatch({type:'SET_MEUSENDERECOS', payload:{MeusEnderecos}}),
+        setEnderecoAtivo:(EnderecoAtivo)=>dispatch({type:'SET_ENDERECOATIVO', payload:{EnderecoAtivo}}),
         setcarCompra:(ListCarCompra)=>dispatch({type:'SET_LISTCARCOMPRA', payload:{ListCarCompra}}),
         setClearJwt:(jwt)=>dispatch({type:'SET_JWT', payload:{jwt}}),
         setEndereco:(Endereco)=>dispatch({type:'SET_ENDERECO', payload:{Endereco}}),

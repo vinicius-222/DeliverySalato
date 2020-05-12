@@ -4,9 +4,11 @@ import Loading from '../../components/Loading';
 import BalonCaution from '../../components/BalonCaution';
 import DatePicker from 'react-native-datepicker';
 import AddressModal from '../../components/Address/AddressModal';
-import Geocoder from 'react-native-geocoding';
-import Geolocation from '@react-native-community/geolocation';
-import moment from 'moment';
+import dateFnsFormat from 'date-fns/format';
+import dateFnsParse from 'date-fns/parse';
+import { parseISO, format, formatRelative, formatDistance , parse} from 'date-fns';
+import localeBR from 'date-fns/locale/en-CA';
+  
 import useSalatoDeliveryAPI, { BASEAPIIMAGE } from '../../useSalatoDeliveryAPI';
 import {
     Safe,
@@ -58,6 +60,7 @@ import {
     HeaderEnderecoBalonTriangle,
     HeaderEnderecoBalonTriangleText
 } from './styled';
+import { months } from 'moment';
 
 let Timer;
 const CarCompra = (props) =>{
@@ -73,7 +76,8 @@ const CarCompra = (props) =>{
     const [modalTitle, setModalTitle] = useState('digite seu endereco');
     const [modalVisible, setModalVisible] = useState(false);
 
-    const [date, setDate] = useState(moment());
+    const [date, setDate] = useState(new Date());
+    const [NewDate, setNewDate] = useState(new Date());
 
     const handleModalClick = (field, item) => {
         setVisibleBalon(field);
@@ -221,6 +225,7 @@ const CarCompra = (props) =>{
         getFormadePagamento();
     },[])
 
+
     return(
         <Safe>
             <ScrolArea>
@@ -244,7 +249,7 @@ const CarCompra = (props) =>{
                         clickAction={handleModalClick}
                         visibleBalon={setVisibleBalon}
                     />
-                    <HeaderEnderecoTpEntregaText>{props.TpEntrega}</HeaderEnderecoTpEntregaText>
+                    {props.TpEntrega == 'Entrega' &&  <HeaderEnderecoTpEntregaText>Endereço</HeaderEnderecoTpEntregaText>}
                     {props.TpEntrega == 'Entrega' &&
                         <HeaderEnderecoAreaItem>
                             <HeaderEnderecoArea> 
@@ -255,7 +260,8 @@ const CarCompra = (props) =>{
                                 <HeaderEnderecoIcon source={require('../../assets/images/marker.png')}/>
                             </HeaderEnderecoAction>
                         </HeaderEnderecoAreaItem>
-                    }    
+                    }  
+                    <HeaderEnderecoTpEntregaText style={{color: activeAgendamento ? '#FF0000' : '#999'}}>Agendamento</HeaderEnderecoTpEntregaText>  
                     <HeaderAgendamentoArea>
                         <AreaSangriaAgendamento>
                         
@@ -263,14 +269,19 @@ const CarCompra = (props) =>{
                         <DatePicker 
                             disabled={!activeAgendamento}
                             style={{width:'50%',border:0}}
-                            date={date}
+                            date={NewDate}
+                            locale='pt-br'
                             mode="datetime"
                             placeholder="agende um horario para entrega ou retirada"
                             format="DD/MM/YYYY hh:mm a"
                             confirmBtnText="Confirma"
                             cancelBtnText="Cancelar"
                             showIcon={false}
+                            minDate={format(new Date(), 'dd/LL/yyyy hh:mm a')}
+                            maxDate={format(new Date().setDate( new Date().getDate() + 2), 'dd/LL/yyyy 21:00')}
+                            minuteInterval={30}
                             is24Hour={true}
+                            maxHors='21:00'
                             customStyles={{
                                 dateIcon: {
                                     position: 'absolute',
@@ -284,10 +295,17 @@ const CarCompra = (props) =>{
                                     borderColor:'transparent',
                                     borderRadius:5,
                                     border:0,
-                                }
+                                
+                                },
+                                
+
+                               
                             // ... You can check the source to find the other keys.
                             }}
-                            onDateChange={(date) => setDate(date)}
+                            onDateChange={(i) =>{
+                                let s = parse(i,'dd/LL/yyyy hh:mm a', new Date(), localeBR);
+                                setNewDate(s);
+                            }}
                         />
                         <StAgendamento value={activeAgendamento} onValueChange={(i)=>setactiveAgendamento(i)}/>
                     </HeaderAgendamentoArea>

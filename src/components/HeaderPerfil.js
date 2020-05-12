@@ -8,7 +8,7 @@ const Container = styled.View`
     align-items:center;
 `;
 const HeaderTitle = styled.Text`
-    color:#FFF;
+    color:#000;
     font-size:16px;
 `;
 

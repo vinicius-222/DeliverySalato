@@ -106,8 +106,6 @@ Perfil.navigationOptions = (props) => {
     return{ 
         headerTitle:<HeaderPerfil />,
         headerStyle:{
-            height:100,
-            backgroundColor:'#FF0000'
         }
 
     }

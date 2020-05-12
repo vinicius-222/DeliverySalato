@@ -52,10 +52,12 @@ export const BodyProdutoAdicionar = styled.TouchableHighlight`
     padding:5px;
     background-color:#FF0000;
     border-radius:5px;
+    width:100px;
 `;
 export const BodyProdutoText = styled.Text`
     color:#FFF;
-    font-size:12px;
+    font-size:14px;
+    text-align:center;
 `;
 
 const BASE = BASEAPIIMAGE;

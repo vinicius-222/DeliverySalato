@@ -33,7 +33,7 @@ const HeaderEnderecoBalonTriangleText = styled.Text`
     top:${props=>props.top}
     left:${props=>props.left};
     position:absolute;
-    color:#000;
+    color:#FF0000;
     font-size:12px;
     z-index:-1;
 `;
@@ -42,8 +42,8 @@ const BalonCaution = (props) => {
     return(
         <HeaderEnderecoBalon active={props.active}>
             <HeaderEnderecoBalonTriangle>
-                <HeaderEnderecoBalonTriangleText top={-47} left={-250}>Clique aqui para terminar o cadastro do </HeaderEnderecoBalonTriangleText>
-                <HeaderEnderecoBalonTriangleText top={-31} left={-250}>seu endereco</HeaderEnderecoBalonTriangleText>
+                <HeaderEnderecoBalonTriangleText top={-50} left={-250}>Clique aqui para terminar o cadastro do </HeaderEnderecoBalonTriangleText>
+                <HeaderEnderecoBalonTriangleText top={-35} left={-250}>seu endereco</HeaderEnderecoBalonTriangleText>
             </HeaderEnderecoBalonTriangle>
         </HeaderEnderecoBalon>
     )

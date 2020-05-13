@@ -188,7 +188,6 @@ const AddressModal = (props) => {
     }
 
     const handleClose = () => {
-
     }
 
     const handleResultClick = async(item) => {
@@ -208,7 +207,7 @@ const AddressModal = (props) => {
             const End = `${item.DsLogradouro}, ${item.NrNumero} - ${item.DsBairro} , ${item.DsCidade} / ${item.CdUF} - CEP:${item.DsCEP}`
             props.clickAction(props.field,End );
             props.visibleAction(false);
-        }
+        } 
     }
     const handleCurrentInsert = () => {
         setStUsarGeoLocation(true);
@@ -242,8 +241,9 @@ const AddressModal = (props) => {
         arr[k].NmEndereco = NmEndereco;
         arr[k].DsPontoDeReferencia = DsPontoDeReferencia;
         arr[k].NmDestinatario = NmDestinatario;
-        setEndereco(arr);
+        setMeusEndereco(arr);
         const json = await api.updateEndereco(props.jwt, IdEndereco, DsLogradouro, DsBairro, DsCidade, NrNumero, DsCEP, CdUF, StEntrega, TpEndereco, NmEndereco, DsPontoDeReferencia, NmDestinatario );
+        console.log(json);
         if (!json.error){
             alert("registor atulizado!!");
         }
@@ -267,7 +267,7 @@ const AddressModal = (props) => {
             onShow={handleClose}
             onDismiss={handleClose}
         >
-            <ModalArea>
+            <ModalArea Platform={Platform}>
                 <Container>
                     <EditModal 
                         title="Editar"

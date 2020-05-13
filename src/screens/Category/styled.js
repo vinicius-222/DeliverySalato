@@ -26,7 +26,7 @@ export const HeaderCategoria = styled.View`
     align-items:center;
 `;
 
-export const HeaderCategoriaArea = styled.View`
+export const HeaderCategoriaArea = styled.TouchableHighlight`
     height:44%;
     width:45%;
     justify-content:center;
@@ -39,6 +39,8 @@ export const HeaderCategoriaArea = styled.View`
 export const HeaderCategoriaAction = styled.TouchableHighlight`
     justify-content:center;
     align-items:center;    
+    width:100%;
+    height:100%;
 `;
 export const HeaderCategoriaTitle = styled.Text`
     font-size:20px;
@@ -47,11 +49,11 @@ export const HeaderCategoriaTitle = styled.Text`
 
 export const HeaderCategoriaItem = styled.View`
     justify-content:center;
-    align-items:center;     
+    align-items:center;         
 `;
 export const HeaderCategoriaImage = styled.Image`
-    height:140px;
-    width:140px;
+    height:100px;
+    width:100px;
     resizeMode:contain;
 `;
 export const HeaderCategoriaDesc= styled.Text`

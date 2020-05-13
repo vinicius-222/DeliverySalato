@@ -10,7 +10,8 @@ import {
     Container,
     HeaderArea,
     HeaderTitle,
-    Imagem
+    Imagem,
+    AreaLogo
 } from './styled';
 
 const Perfil = (props) =>{
@@ -96,7 +97,9 @@ const Perfil = (props) =>{
                 <HeaderArea onPress={()=>props.setSignOut()} underlayColor='#EEE'> 
                     <HeaderTitle name='Sair' >Sair</HeaderTitle>
                 </HeaderArea>
-                
+                <AreaLogo>
+                    <Imagem source={require('../../assets/images/Logo.png')}/>
+                </AreaLogo>
             </Container>
         </Safe>
     )

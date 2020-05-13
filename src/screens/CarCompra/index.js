@@ -253,7 +253,9 @@ const CarCompra = (props) =>{
                     {props.TpEntrega == 'Entrega' &&
                         <HeaderEnderecoAreaItem>
                             <HeaderEnderecoArea> 
-                                <BalonCaution active={visibleBalon}/>
+                                {visibleBalon &&  
+                                    <BalonCaution active={visibleBalon}/>
+                                }
                                 <HeaderEnderecoTextInput>{props.Endereco}</HeaderEnderecoTextInput>
                             </HeaderEnderecoArea>
                             <HeaderEnderecoAction onPress={()=>handleCurrentLocation()} underlayColor="transparent" >
@@ -350,10 +352,7 @@ const CarCompra = (props) =>{
 CarCompra.navigationOptions = ({navigation}) =>{
     return{
         headerShown:true,
-        headerTitle:'Carrinho',
-        headerLeft:<ButtonActionPagamento onPress={()=>navigation.navigate('SearchStack')} underlayColor="transparent">
-                        <TextoActionPagamento>Comprar mais</TextoActionPagamento>
-                    </ButtonActionPagamento>
+        headerTitle:'Carrinho'
     }
 }
 

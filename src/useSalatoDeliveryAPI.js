@@ -416,7 +416,8 @@ const useSalatoDeliveryAPI = (props) => ({
     updateEndereco:async (jwt, IdEndereco, DsLogradouro, DsBairro, DsCidade, NrNumero, DsCEP, CdUF, StEntrega, TpEndereco = '', NmEndereco = '', DsPontoDeReferencia = '', NmDestinatario = '') => {
         const json = await apiFetchPost(
             '/user/updateEndereco',
-            {jwt, IdEndereco, DsLogradouro, DsBairro, DsCidade, NrNumero, DsCEP, CdUF, StEntrega, TpEndereco, NmEndereco, DsPontoDeReferencia, NmDestinatario}
+            {jwt, IdEndereco, DsLogradouro, DsBairro, DsCidade, NrNumero, DsCEP, CdUF, StEntrega, TpEndereco, NmEndereco, DsPontoDeReferencia, NmDestinatario},
+            props
         )
         return json;
     },
@@ -424,7 +425,8 @@ const useSalatoDeliveryAPI = (props) => ({
     updateStEndereco:async (jwt, IdEndereco, StEntrega) => {
         const json = await apiFetchPost(
             '/user/updateStEndereco',
-            {jwt, IdEndereco, StEntrega}
+            {jwt, IdEndereco, StEntrega},
+            props
         )
         return json;
     },

@@ -10,6 +10,7 @@ const Safe = styled.SafeAreaView`
     background-color:#FFF;
 `;
 const Container = styled.View`
+    margin-top:${props=>props.Platform.OS == 'ios' ? '0px' : '15px'};
     padding:0px 15px;
     background-color:#FFF;
 `;
@@ -20,8 +21,8 @@ const ModalArea = styled.Modal`
     background-color:#FFF;
 `;
 const ModalAreaListUFView = styled.View`
-height:20px;
-background-color:#FF0000;
+    height:20px;
+    background-color:#FF0000;
 `;
 const ModalAreaListUF = styled.Modal`
     height:200px;
@@ -51,16 +52,16 @@ const ButtonActiveModal = styled.TouchableHighlight`
     align-items:center;
 `;
 const ModalNmDestinatarioArea = styled.View`
-    height30px;
+    height:50px;
     border-bottom-width:0.5px;
     border-bottom-color:#FF0000;
     padding:5px 5px;
 `;
 const ModalTpEnderecoArea = styled.View`
-    height30px;
+    height:50px;
     border-bottom-width:0.5px;
     border-bottom-color:#FF0000;
-    padding:10px 5px;
+    padding:5px 5px;
 `;
 const ModalDsLogradouroArea = styled.View`
     flex-direction:row;
@@ -70,7 +71,7 @@ const ModalDsLogradouroAreaText = styled.View`
     height:50px;
     border-bottom-width:0.5px;
     border-bottom-color:#FF0000;
-    padding:10px 5px;
+    padding:5px 5px;
     flex:1;
 `;
 
@@ -78,18 +79,18 @@ const ModalNrNumeroAreaText = styled.View`
     height:50px;
     border-bottom-width:0.5px;
     border-bottom-color:#FF0000;
-    padding:10px 5px;
+    padding:5px 5px;
     margin-left:10px;
 `;
 
 const ModalNmEnderecoArea = styled.View`
-    height30px;
+    height:50px;
     border-bottom-width:0.5px;
     border-bottom-color:#FF0000;
     padding:5px 5px;
 `;
 const TxtLogradouro = styled.TextInput`
-    font-size:16px;
+    font-size:17px;
     margin-top:5px;
     color:#000;
     padding:0px;
@@ -103,14 +104,14 @@ const ModalDsBairro = styled.View`
     height:50px;
     border-bottom-width:0.5px;
     border-bottom-color:#FF0000;
-    padding:10px 5px;
+    padding:5px 5px;
     flex:1;
 `;
 const ModalDsCidade = styled.View`
     height:50px;
     border-bottom-width:0.5px;
     border-bottom-color:#FF0000;
-    padding:10px 5px;
+    padding:5px 5px;
     margin-left:10px;
     flex:1;
 `;
@@ -122,24 +123,36 @@ const ModalDsCEPArea = styled.View`
     height:50px;
     border-bottom-width:0.5px;
     border-bottom-color:#FF0000;
-    padding:10px 5px;
+    padding:5px 5px;
     flex:1;
 `;
 const ModalCdUFArea = styled.View`
+    justify-content:flex-end;
     height:50px;
+    width:100px;
     border-bottom-width:0.5px;
     border-bottom-color:#FF0000;
-    padding:10px 5px;
     margin-left:10px;
 `;
 
 const DataPicker = styled.Picker`
-    color:#CCCCCC;
-    height:20px;
+    color:#999;
+    height:25px;
     width:100%;
-    marginBottom:20px;
+    font-size:17px;
+    margin-bottom:20px;
+    margin-top:5px;
 `;
 
+const DataPickerUF = styled.Picker`
+    color:#999;
+    height:25px;
+    padding:5px;
+    width:100%;
+    font-size:17px;
+    margin-top:5px;
+    margin-bottom:0px;
+`;
 const ButtonActionArea = styled.View`
     justify-content:center;
     align-items:center;
@@ -159,10 +172,10 @@ const ButtonText = styled.Text`
     font-weight:bold;
 `;
 const ModalDsPontoDeReferenciaArea = styled.View`
-height30px;
-border-bottom-width:0.5px;
-border-bottom-color:#FF0000;
-padding:5px 5px;
+    height:50px;
+    border-bottom-width:0.5px;
+    border-bottom-color:#FF0000;
+    padding:5px 5px;
 `;
 const UpdateAddressModal = (props) => {
     const [VisibleModalUF, setVisibleModalUF] = useState(false);
@@ -171,11 +184,10 @@ const UpdateAddressModal = (props) => {
     const [DsBairro, setDsBairro] = useState(props.data.DsBairro);
     const [DsCidade, setDsCidade] = useState(props.data.DsCidade);
     const [DsCEP, setDsCEP] = useState(props.data.DsCEP);
-    const [CdUF, setCdUF] = useState(props.data.CdUF);
     const [NmDestinatario, setNmDestinatario] = useState(props.data.NmDestinatario);
     const [DsPontoDeReferencia, setDsPontoDeReferencia] = useState(props.data.DsPontoDeReferencia);
     const [NmEndereco, setNmEndereco] = useState(props.data.NmEndereco);
-    const [Uf, setUf] = useState(props.data.CdUF)
+    const [CdUF, setCdUF] = useState(props.data.CdUF);
     const [listUf, setListUF] = useState([{label:'AC', value:'AC'},
                                           {label:'AM', value:'AM'},
                                           {label:'RR', value:'RR'},
@@ -248,7 +260,7 @@ const UpdateAddressModal = (props) => {
         return <DataPicker.Item key={k} value={k} label={v.label} />
     });
     let ListUFItems = listUf.map((v, k) => {
-        return <DataPicker.Item key={k} value={k} label={v.label} />
+        return <DataPicker.Item key={k} value={v.value} label={v.label} />
     });
     return(
         <ModalArea 
@@ -257,7 +269,7 @@ const UpdateAddressModal = (props) => {
             visible={props.visible}
         >
             <Safe>
-                <Container>
+                <Container Platform={Platform}>
                     <ButtonActionClose onPress={()=>props.visibleAction(false)}>
                         <Title>X</Title>
                     </ButtonActionClose>
@@ -283,6 +295,7 @@ const UpdateAddressModal = (props) => {
                         :
                         <DataPicker 
                             selectedValue={TpEndereco == null ? 0 : parseInt(TpEndereco)}  
+                            pickerSelectStyles={false}
                             onValueChange={(itemValue, ItemIndex) => {setTpEndereco(ItemIndex)}}>
                                 {TpEnderecoItems}
                         </DataPicker>}
@@ -331,11 +344,14 @@ const UpdateAddressModal = (props) => {
                                       }
                                 />
                                 :
-                                <DataPicker 
-                                    selectedValue={Uf == null ? 0 : parseInt(Uf)}  
-                                    onValueChange={(itemValue, ItemIndex) => {setUf(ItemIndex)}}>
+                                <DataPickerUF 
+                                    selectedValue={CdUF}  
+                                    onValueChange={(itemValue, ItemIndex) => {
+                                        setCdUF(itemValue)
+                                        console.log(itemValue)
+                                    }}>
                                         {ListUFItems}
-                                </DataPicker>}
+                                </DataPickerUF>}
                         </ModalCdUFArea>
                     </ModalDsCEPCdUFArea>
                     <ModalDsPontoDeReferenciaArea>

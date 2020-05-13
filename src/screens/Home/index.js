@@ -27,6 +27,7 @@ const Home = (props) =>{
     const [ProductsInfo, setProductsInfo] = useState('Teste');
     const [selectedMonth, setSelectedMonth] = useState();
     const [currentPage, setCurrentPage] = useState(1);
+    const [widthImagemPlatform, setwidthImagemPlatform] = useState(0);
 
     const handleScrollEnd = (e) => {
         let posX = e.nativeEvent.contentOffset.x;
@@ -112,6 +113,8 @@ const Home = (props) =>{
         getInfoUsuario();
         location();
         getMeusEnderecos();
+        let s  = screenWidth - 24;
+        setwidthImagemPlatform(s);
     },[])
 
     return(
@@ -126,9 +129,9 @@ const Home = (props) =>{
                 onMomentumScrollEnd={handleScrollEnd}
             >
                 <BodyArea>
-                    <Imagen source={{uri:'http://138.99.15.234:20003/images/WhatsApp%20Image%202019-09-19%20at%2016.49.26.jpeg'}}/>
-                    <Imagen source={{uri:'http://138.99.15.234:20003/images/WhatsApp%20Image%202019-09-19%20at%2016.49.26%20(1).jpeg'}}/>
-                    <Imagen source={{uri:'http://138.99.15.234:20003/images/WhatsApp%20Image%202019-09-19%20at%2016.49.26%20(2).jpeg'}}/>
+                    <Imagen height={widthImagemPlatform} source={{uri:'http://138.99.15.234:20003/images/WhatsApp%20Image%202019-09-19%20at%2016.49.26.jpeg'}}/>
+                    <Imagen height={widthImagemPlatform} source={{uri:'http://138.99.15.234:20003/images/WhatsApp%20Image%202019-09-19%20at%2016.49.26%20(1).jpeg'}}/>
+                    <Imagen height={widthImagemPlatform} source={{uri:'http://138.99.15.234:20003/images/WhatsApp%20Image%202019-09-19%20at%2016.49.26%20(2).jpeg'}}/>
                 </BodyArea>
             </HeaderCategoria>
         </Container>

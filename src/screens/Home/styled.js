@@ -15,8 +15,8 @@ export const BodyArea = styled.View`
 `;
 
 export const Imagen = styled.Image`
-    height:390px;
-    width:390px;
+    height:${props=>props.height && props.height}px;
+    width:${props=>props.height && props.height}px;
     resizeMode:center;
     border-radius:5px;
     margin:10px 12px;

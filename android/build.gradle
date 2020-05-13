@@ -1,5 +1,5 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
-/*subprojects {
+subprojects {
     afterEvaluate {project ->
         if (project.hasProperty("android")) {
             android {
@@ -16,7 +16,7 @@
             }
         }
     }
-}*/
+}
 buildscript {
     ext {
         buildToolsVersion = "28.0.3"

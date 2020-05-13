@@ -39,7 +39,7 @@ const Category = (props) =>{
                 <HeaderArea>
                         <HeaderCategoria>
                             {listCategoria.map((i,k)=>(
-                                <HeaderCategoriaArea key={k} active={activeCategoria == i.DsGrupoProduto} >
+                                <HeaderCategoriaArea key={k} active={activeCategoria == i.DsGrupoProduto} onPress={()=>HandleProdutos(i)} >
                                     <HeaderCategoriaAction onPress={()=>HandleProdutos(i)} underlayColor="transparent">
                                         <HeaderCategoriaItem active={activeCategoria == i.DsGrupoProduto}>
                                                 <HeaderCategoriaImage source={{uri:BASE+i.DsImagemSite}} />

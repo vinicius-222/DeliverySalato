@@ -76,7 +76,6 @@ const CarCompra = (props) =>{
     const [modalTitle, setModalTitle] = useState('digite seu endereco');
     const [modalVisible, setModalVisible] = useState(false);
 
-    const [date, setDate] = useState(new Date());
     const [NewDate, setNewDate] = useState(new Date());
 
     const handleModalClick = (field, item) => {

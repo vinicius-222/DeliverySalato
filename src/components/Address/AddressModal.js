@@ -305,7 +305,7 @@ const AddressModal = (props) => {
                         <ModalLocalizacaoAtual onPress={()=>handleCurrentInsert()} underlayColor="transparent">
                             <ModalLocalizacaoAtualArea>
                                 <ModalLocalizacaoAtualImage  source={require('../../assets/images/Target.png')}/>
-                                <ModalLocalizacaoAtualText>{props.Endereco}</ModalLocalizacaoAtualText>
+                                <ModalLocalizacaoAtualText>{`${ props.GeoEndereco[0]} N:${ props.GeoEndereco[1]}, ${ props.GeoEndereco[2]} - ${ props.GeoEndereco[3]} / ${ props.GeoEndereco[4]}, CEP:${ props.GeoEndereco[5]}`}</ModalLocalizacaoAtualText>
                             </ModalLocalizacaoAtualArea>
                         </ModalLocalizacaoAtual>
                     </ModalHeader>

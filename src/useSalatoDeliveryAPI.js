@@ -74,7 +74,6 @@ const apiFetchPost = async (endpoint, body, props) => {
         body:JSON.stringify(body)
     });
     const json = await res.json();
-
     if (json.error){
         props.navigation.dispatch(StackActions.reset({
             index:0,
@@ -405,6 +404,14 @@ const useSalatoDeliveryAPI = (props) => ({
         return json;
     },
 
+    getCode:async(TableName, FieldName) =>{
+        const json = await apiFetchGet(
+            '/pedidos/GetCode',
+            {TableName,FieldName}
+        )
+        return json;
+    },
+
     insertEndereco:async (jwt, DsLogradouro, DsBairro, DsCidade, NrNumero, DsCEP, CdUF, TpEndereco = '', NmEndereco = '', DsPontoDeReferencia = '', NmDestinatario = '') => {
         const json = await apiFetchPost(
             '/user/insertEndereco',
@@ -483,7 +490,29 @@ const useSalatoDeliveryAPI = (props) => ({
                 resolve([Logradouro, numero, Bairro, Cidade, UF, CEP]);
             })
         })
-    }
+    },
+
+    sendPedidoDeVenda:async(IdPedidoDeVenda, CdChamada, DtPedido, DtEntrega, IdEmpresa, VlPedido,TpPedido, IdCondicaoPagamento, VlTotalPedido,itensPedido, DsObservacao, jwt) => {
+        const json = await apiFetchPost(
+            '/pedidovenda/sendPedidosDelivery',
+            {
+                "IdPedidoDeVenda":IdPedidoDeVenda,
+                "CdChamada":CdChamada,
+                "DtPedido":DtPedido,
+                "DtEntrega":DtEntrega,
+                "IdEmpresa":IdEmpresa,
+                "VlPedido":VlPedido,
+                "TpPedido":TpPedido,
+                "IdCondicaoPagamento":IdCondicaoPagamento,
+                "VlTotalPedido":VlTotalPedido,
+                "itensPedido":itensPedido,
+                "DsObservacao":DsObservacao,
+                "jwt":jwt
+            },
+            props
+        )
+        return json;
+    },
     
 });
 

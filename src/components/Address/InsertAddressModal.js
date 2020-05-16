@@ -1,5 +1,5 @@
 import React,{ useState, useEffect, useRef } from 'react';
-import { Platform, Picker } from 'react-native'
+import { Platform, Picker, StyleSheet } from 'react-native'
 import styled from 'styled-components/native';
 import Geocoder from 'react-native-geocoding';
 import Geolocation from '@react-native-community/geolocation';
@@ -8,16 +8,15 @@ import useSalatoDeliveryAPI from '../../useSalatoDeliveryAPI';
 import RNPickerSelect from 'react-native-picker-select';
 import Loading from '../Loading';
 import { CEPMask } from '../Mask';
+const ScroollContainer = styled.ScrollView`
+    flex:1;
+`;
 const Safe = styled.SafeAreaView`
     flex:1;
     background-color:#FFF;
 `;
-const PickerList = styled.Picker`
-
-`;
-
 const KeyBordoSafeArea = styled.KeyboardAvoidingView`
-    flex:1;
+
 `;
 const Container = styled.View`
     margin-top:${props=>props.Platform.OS == 'ios' ? '0px' : '10px'};
@@ -68,7 +67,7 @@ const ModalDsLogradouroAreaText = styled.View`
     height:50px;
     border-bottom-width:0.5px;
     border-bottom-color:#FF0000;
-    padding:10px 5px;
+    padding:5px 5px;
     flex:1;
 `;
 
@@ -76,21 +75,21 @@ const ModalNrNumeroAreaText = styled.View`
     height:50px;
     border-bottom-width:0.5px;
     border-bottom-color:#FF0000;
-    padding:10px 5px;
+    padding:5px 5px;
     margin-left:10px;
 `;
 const ModalNmEnderecoArea = styled.View`
     height:50px;
     border-bottom-width:0.5px;
     border-bottom-color:#FF0000;
-    padding:10px 5px;
+    padding:5px 5px;
 `;
 const TxtLogradouro = styled.TextInput`
     font-size:17px;
-    padding:0px 5px;
-    height:30px;
+    margin-top:5px;
     color:#000;
-
+    padding:0px;
+    height:25px;
 `;
 const ModalDsCidadeDsBairroArea = styled.View`
     flex-direction:row;
@@ -100,15 +99,14 @@ const ModalDsBairro = styled.View`
     height:50px;
     border-bottom-width:0.5px;
     border-bottom-color:#FF0000;
-    padding:10px 5px;
+    padding:5px 5px;
     flex:1;
 `;
 const ModalNmDestinatarioArea = styled.View`
-
     height:50px;
     border-bottom-width:0.5px;
     border-bottom-color:#FF0000;
-    padding:10px 5px;
+    padding:5px 5px;
 `;
 const ModalTpEnderecoArea = styled.View`
     height:50px;
@@ -121,7 +119,7 @@ const ModalDsCidade = styled.View`
     height:50px;
     border-bottom-width:0.5px;
     border-bottom-color:#FF0000;
-    padding:10px 5px;
+    padding:5px 5px;
     margin-left:10px;
     flex:1;
 `;
@@ -133,10 +131,8 @@ const ModalDsCEPArea = styled.View`
     height:50px;
     border-bottom-width:0.5px;
     border-bottom-color:#FF0000;
-    padding:10px 5px;
+    padding:5px 5px;
     flex:1;
-
-    
 `;
 const ModalCdUFArea = styled.View`
     justify-content:flex-end;
@@ -145,6 +141,7 @@ const ModalCdUFArea = styled.View`
     border-bottom-width:0.5px;
     border-bottom-color:#FF0000;
     margin-left:10px;
+    padding:5px 5px;
 `;
 const ButtonActionArea = styled.View`
     justify-content:center;
@@ -160,22 +157,24 @@ const ButtonActionSalvar = styled.TouchableHighlight`
     align-items:center;
 `;
 const DataPicker = styled.Picker`
-    color:#999;
+    color:#000;
     height:25px;
     width:100%;
-    font-size:17px;
-    margin-bottom:20px;
+    font-weight:bold;
+    margin-left:-5px;
+    font-size:24px;
+    margin-bottom:15px;
     margin-top:5px;
 `;
 
 const DataPickerUF = styled.Picker`
-    color:#999;
+    color:#000;
     height:25px;
-    padding:5px;
+    padding:0px;
     width:100%;
     font-size:17px;
     margin-top:5px;
-    margin-bottom:0px;
+    margin-bottom:-5px;
 `;
 const ButtonText = styled.Text`
     font-size:14px;
@@ -183,13 +182,19 @@ const ButtonText = styled.Text`
     font-weight:bold;
 `;
 const ModalDsPontoDeReferenciaArea = styled.View`
-height:50px;
-border-bottom-width:0.5px;
-border-bottom-color:#FF0000;
-padding:10px 5px;
+    height:50px;
+    border-bottom-width:0.5px;
+    border-bottom-color:#FF0000;
+    padding:5px 5px;
+`;
+const ModalAraButtonSelect = styled.View`
+    height:50px;
+    width:50px;
+
 `;
 let timer;
 const InsertAddressModal = (props) => {
+    const favSport1 = useRef(null);
     const api = useSalatoDeliveryAPI(props);
     const [loading, setLoading] = useState(false);
     const [TpEndereco, setTpEndereco] = useState('');
@@ -285,8 +290,13 @@ const InsertAddressModal = (props) => {
                     setDsBairro(json.bairro);
                     setDsCidade(json.cidade);
                     setDsCEP(CEPEndereco);
-                    setCdUF(json.uf);
-                    console.log(json.uf);
+                    if (Platform.OS == 'ios'){
+                        setCdUF(json.uf)
+                    }else{
+                        let key = listUf.findIndex((i)=> i.value == json.uf)
+                        setCdUF(key);
+                    }
+                   
                 }else{
                     setCEPEndereco('Cep nao encontrado!!')
                 }
@@ -307,7 +317,20 @@ const InsertAddressModal = (props) => {
             setDsCEP(props.data[5]);
             setCdUF(props.data[4]);
         }
-    },[props.StGeolocation])
+    },[props.StGeolocation]);
+
+    useEffect(()=>{
+        if (Platform.OS == 'android'){
+            let arrUF = listUf;
+            let arrTpEndereco = listTpEndereco;
+
+            arrUF.unshift({label:'',value:''});
+            arrTpEndereco.unshift({label:'', value:''}); 
+
+            setCdUF(arrUF);
+            setTpEndereco(arrTpEndereco);
+        }
+    },[])
 
     const LimpaCampos = () =>{ 
         setTpEndereco('')
@@ -323,6 +346,9 @@ const InsertAddressModal = (props) => {
         setNmEndereco('')
     }
 
+    useEffect(()=>{
+        console.log(CdUF)
+    },[CdUF])
     let TpEnderecoItems = listTpEndereco.map((v, k) => {
         return <Picker.Item key={k} value={k} label={v.label} />
     });
@@ -335,101 +361,123 @@ const InsertAddressModal = (props) => {
             transparent={true}
             visible={props.visible}
         >   
+            
             <Safe>
-                <KeyBordoSafeArea>
-                    <Container Platform={Platform}>
-                        {loading &&  <Loading />}
-                        <HeaderArea>
-                            <ButtonActionClose onPress={()=>{
-                                LimpaCampos();
-                                props.visibleAction(false);
-                            }}>
-                                <Title>X</Title>
-                            </ButtonActionClose>
-                            <HeaderTextInputSearch value={CEPEndereco} keyboardType="numeric" onChangeText={(i)=>setCEPEndereco(CEPMask(i))} autoFocus={true} placeholder="Digite um CEP ou insira manualmente" placeholderTextColor='#999'/>
-                        </HeaderArea>
-                        <ModalNmDestinatarioArea>
-                            <ModalTitle>Quem Recebe</ModalTitle>
-                            <TxtLogradouro value={NmDestinatario} onChangeText={(i)=>setNmDestinatario(i)}/>
-                        </ModalNmDestinatarioArea>
-                        <ModalTpEnderecoArea>
-                            <ModalTitle>Tipo de Endereco</ModalTitle>
-                            {Platform.OS == 'ios' ? 
-                                <RNPickerSelect
-                                placeholder="Tipo de Endereco"
-                                style={{flex:1, height:25}}
-                                value={TpEndereco}
-                                onValueChange={(value) => setTpEndereco(value)}
-                                items={listTpEndereco}
-                            />
-                            :
-                            <DataPicker 
-                                selectedValue={TpEndereco == null ? 0 : parseInt(TpEndereco)}  
-                                pickerSelectStyles={false}
-                                onValueChange={(itemValue, ItemIndex) => {setTpEndereco(ItemIndex)}}>
-                                    {TpEnderecoItems}
-                            </DataPicker>}
-                        </ModalTpEnderecoArea>
-                        <ModalNmEnderecoArea>
-                            <ModalTitle>Nome Endereco  ex: Casa da minha tia, Casa do meu irmao</ModalTitle>
-                            <TxtLogradouro value={NmEndereco} onChangeText={(i)=>setNmEndereco(i)}/>
-                        </ModalNmEnderecoArea>
-                        <ModalDsLogradouroArea>
-                            <ModalDsLogradouroAreaText>
-                                <ModalTitle>Logradouro (*)</ModalTitle>
-                                <TxtLogradouro value={DsLogradouro} onChangeText={(i)=>setDsLogradouro(i)}/>
-                            </ModalDsLogradouroAreaText>
-                            <ModalNrNumeroAreaText>
-                                <ModalTitle>Numero (*)</ModalTitle>
-                                <TxtLogradouro value={NrNumero} keyboardType="numeric" onChangeText={(i)=>setNrNumero(i)}/>
-                            </ModalNrNumeroAreaText>
-                        </ModalDsLogradouroArea>
-                        <ModalDsCidadeDsBairroArea>
-                            <ModalDsBairro>
-                                <ModalTitle>Bairro (*)</ModalTitle>
-                                <TxtLogradouro value={DsBairro} onChangeText={(i)=>setDsBairro(i)}/>
-                            </ModalDsBairro>
-                            <ModalDsCidade>
-                                <ModalTitle>Cidade (*)</ModalTitle>
-                                <TxtLogradouro value={DsCidade} onChangeText={(i)=>setDsCidade(i)}/>
-                            </ModalDsCidade>
-                        </ModalDsCidadeDsBairroArea>
-                        <ModalDsCEPCdUFArea>
-                            <ModalDsCEPArea>
-                                <ModalTitle>CEP (*)</ModalTitle>
-                                <TxtLogradouro value={DsCEP} keyboardType="numeric" onChangeText={(i)=>setDsCEP(CEPMask(i))}/>
-                            </ModalDsCEPArea>
-                            <ModalCdUFArea>
-                                <ModalTitle>UF (*)</ModalTitle>
-                                {Platform.OS == 'ios' ?
+                <ScroollContainer>
+                    <KeyBordoSafeArea>
+                        <Container Platform={Platform}>
+                            {loading &&  <Loading />}
+                            <HeaderArea>
+                                <ButtonActionClose onPress={()=>{
+                                    LimpaCampos();
+                                    props.visibleAction(false);
+                                }}>
+                                    <Title>X</Title>
+                                </ButtonActionClose>
+                                <HeaderTextInputSearch value={CEPEndereco} keyboardType="numeric" onChangeText={(i)=>setCEPEndereco(CEPMask(i))} autoFocus={true} placeholder="Digite um CEP ou insira manualmente" placeholderTextColor='#999'/>
+                            </HeaderArea>
+                            <ModalNmDestinatarioArea>
+                                <ModalTitle>Quem Recebe</ModalTitle>
+                                <TxtLogradouro value={NmDestinatario} onChangeText={(i)=>setNmDestinatario(i)}/>
+                            </ModalNmDestinatarioArea>
+                            <ModalTpEnderecoArea>
+                                <ModalTitle>Tipo de Endereco</ModalTitle>
+                                {Platform.OS == 'ios' ? 
                                     <RNPickerSelect
-                                        height={19}
-                                        placeholder="selecion UF"
-                                        style={{flex:1, height:25}}
-                                        value={CdUF}
-                                        onValueChange={(value) => setCdUF(value)}
-                                        items={listUf}
+                                        placeholder="Tipo de Endereco"
+                                        style={{...pickerSelectStyles}}
+                                        value={TpEndereco}
+                                        onValueChange={(value) => setTpEndereco(value)}
+                                        items={listTpEndereco}
+                                        Icon = {() => {return(
+                                            <ModalAraButtonSelect
+                                                name="caret-down"
+                                                color={'black'}
+                                                size={35}
+                                                style={pickerSelectStyles.icon}
+                                                backgroundColor="transparent"
+                                                underlayColor="transparent"
+                                            >
+                                            </ModalAraButtonSelect>)}}
                                     />
                                 :
-                                <DataPickerUF 
-                                    selectedValue={CdUF == null ? 0 : parseInt(CdUF)}  
-                                    pickerSelectStyles={false}
-                                    onValueChange={(itemValue, ItemIndex) => {setCdUF(itemValue)}}>
-                                        {ListUFItems}
-                                </DataPickerUF>}
-                            </ModalCdUFArea>
-                        </ModalDsCEPCdUFArea>
-                        <ModalDsPontoDeReferenciaArea>
-                            <ModalTitle>Ponto de Referencia (*)</ModalTitle>
-                            <TxtLogradouro value={DsPontoDeReferencia} onChangeText={(i)=>setDsPontoDeReferencia(i)}/>
-                        </ModalDsPontoDeReferenciaArea>
-                        <ButtonActionArea>
-                            <ButtonActionSalvar onPress={()=>HandleSalvar()}>
-                                <ButtonText>Salvar</ButtonText>
-                            </ButtonActionSalvar>
-                        </ButtonActionArea>
-                    </Container>
-                </KeyBordoSafeArea>
+                                <DataPicker 
+                                    selectedValue={TpEndereco == null ? 0 : parseInt(TpEndereco)}  
+                                    pickerSelectStyles={true}
+                                    onValueChange={(itemValue, ItemIndex) => {setTpEndereco(itemValue)}}>
+                                        {TpEnderecoItems}
+                                </DataPicker>}
+                            </ModalTpEnderecoArea>
+                            <ModalNmEnderecoArea>
+                                <ModalTitle>Nome Endereco  ex: Casa da minha tia, Casa do meu irmao</ModalTitle>
+                                <TxtLogradouro value={NmEndereco} onChangeText={(i)=>setNmEndereco(i)}/>
+                            </ModalNmEnderecoArea>
+                            <ModalDsLogradouroArea>
+                                <ModalDsLogradouroAreaText>
+                                    <ModalTitle>Logradouro (*)</ModalTitle>
+                                    <TxtLogradouro value={DsLogradouro} onChangeText={(i)=>setDsLogradouro(i)}/>
+                                </ModalDsLogradouroAreaText>
+                                <ModalNrNumeroAreaText>
+                                    <ModalTitle>Numero (*)</ModalTitle>
+                                    <TxtLogradouro value={NrNumero} keyboardType="numeric" onChangeText={(i)=>setNrNumero(i)}/>
+                                </ModalNrNumeroAreaText>
+                            </ModalDsLogradouroArea>
+                            <ModalDsCidadeDsBairroArea>
+                                <ModalDsBairro>
+                                    <ModalTitle>Bairro (*)</ModalTitle>
+                                    <TxtLogradouro value={DsBairro} onChangeText={(i)=>setDsBairro(i)}/>
+                                </ModalDsBairro>
+                                <ModalDsCidade>
+                                    <ModalTitle>Cidade (*)</ModalTitle>
+                                    <TxtLogradouro value={DsCidade} onChangeText={(i)=>setDsCidade(i)}/>
+                                </ModalDsCidade>
+                            </ModalDsCidadeDsBairroArea>
+                            <ModalDsCEPCdUFArea>
+                                <ModalDsCEPArea>
+                                    <ModalTitle>CEP (*)</ModalTitle>
+                                    <TxtLogradouro value={DsCEP} keyboardType="numeric" onChangeText={(i)=>setDsCEP(CEPMask(i))}/>
+                                </ModalDsCEPArea>
+                                <ModalCdUFArea>
+                                    <ModalTitle>UF (*)</ModalTitle>
+                                    {Platform.OS == 'ios' ?
+                                        <RNPickerSelect
+                                            height={19}
+                                            placeholder="selecion UF"
+                                            style={{...pickerSelectStyles}}
+                                            value={CdUF}
+                                            onValueChange={(value) => setCdUF(value)}
+                                            items={listUf}
+                                            Icon = {() => {return(
+                                                <ModalAraButtonSelect
+                                                    name="caret-down"
+                                                    color={'black'}
+                                                    size={35}
+                                                    style={pickerSelectStyles.icon}
+                                                    underlayColor="transparent"
+                                                >
+                                                </ModalAraButtonSelect>)}}
+                                        />
+                                    :
+                                            <DataPickerUF 
+                                            selectedValue={CdUF == null ? 0 : parseInt(CdUF)} 
+                                            pickerSelectStyles={true}
+                                            onValueChange={(itemValue, ItemIndex) => {setCdUF(itemValue)}}>
+                                                {ListUFItems}
+                                        </DataPickerUF>}
+                                </ModalCdUFArea>
+                            </ModalDsCEPCdUFArea>
+                            <ModalDsPontoDeReferenciaArea>
+                                <ModalTitle>Ponto de Referencia (*)</ModalTitle>
+                                <TxtLogradouro value={DsPontoDeReferencia} onChangeText={(i)=>setDsPontoDeReferencia(i)}/>
+                            </ModalDsPontoDeReferenciaArea>
+                            <ButtonActionArea>
+                                <ButtonActionSalvar onPress={()=>HandleSalvar()}>
+                                    <ButtonText>Salvar</ButtonText>
+                                </ButtonActionSalvar>
+                            </ButtonActionArea>
+                        </Container>
+                    </KeyBordoSafeArea>
+                </ScroollContainer>
             </Safe>
         </ModalArea>
     )       
@@ -437,3 +485,50 @@ const InsertAddressModal = (props) => {
 }
 
 export default InsertAddressModal;
+
+const pickerSelectStylesAndroid = StyleSheet.create({
+    inputAndroid: {
+        fontSize: 16,
+        paddingHorizontal: 10,
+        paddingVertical: 8,
+        borderWidth: 0.5,
+        borderColor: 'purple',
+        borderRadius: 8,
+        color: 'black',
+        paddingRight: 30, // to ensure the text is never behind the icon
+      }, 
+})
+
+const pickerSelectStyles = StyleSheet.create({
+    inputIOS: {
+        fontSize:17,
+        marginTop:5,
+        borderRadius: 4,
+        color:'black',
+        paddingRight: 30, // to ensure the text is never behind the icon
+    },
+    icon:{
+        position: 'absolute',
+		backgroundColor: 'transparent',
+		borderTopWidth: 5,
+		borderTopColor: '#000',
+		borderRightWidth: 5,
+		borderRightColor: 'transparent',
+		borderLeftWidth: 5,
+		borderLeftColor: 'transparent',
+		width: 0,
+		height: 0,
+		top: 10,
+		right: 15,
+    },
+    inputAndroid: {
+      fontSize: 16,
+      paddingHorizontal: 10,
+      paddingVertical: 8,
+      borderWidth: 0.5,
+      borderColor: 'purple',
+      borderRadius: 8,
+      color: 'black',
+      paddingRight: 30, // to ensure the text is never behind the icon
+    }, 
+})

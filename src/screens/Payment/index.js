@@ -34,6 +34,37 @@ const Pagamento = (props) =>{
         setListFormaDePagamento(props.ListFormaDePagamento);
     }
 
+    const handleEnviar = async () => {
+        let Itens = {'itensPedido':props.ListCarCompra};
+        let IdPedidoDeVenda = await Api.getCode(
+            'PedidoDeVenda',
+            'IdPedidoDeVenda'
+        );
+        const json = await Api.sendPedidoDeVenda(
+            IdPedidoDeVenda,
+            2,
+            new Date(),
+            new Date(),
+            35,
+            props.VlTotalProduto,
+            "A",
+            active,
+            props.VlTotalProduto,
+            Itens,
+            "",
+            props.jwt,
+        )
+        
+        if (!json.error){
+            props.setcarCompra([]);
+            
+            props.navigation.navigate('Home');
+            alert('Pedido enviado com sucesso!!');
+        }else{
+            alert('Pedido nao enviado!!');
+        }
+    }
+
     const CalculaTroco = () => {
         let t = parseFloat(troco);
         let v = parseFloat(props.VlTotalProduto + 5).toFixed(2);
@@ -102,7 +133,7 @@ const Pagamento = (props) =>{
                     </>
                     }
                 </BodyFormaDePagamentoArea>
-                <BottomActionContinuar>
+                <BottomActionContinuar onPress={()=>handleEnviar()}>
                     <BottomActionText>Finalizar Compra</BottomActionText>    
                 </BottomActionContinuar>
             </Container>
@@ -119,6 +150,7 @@ const mapStateToProps = (state) => {
     return{
         jwt:state.userReducer.jwt,
         ListCarCompra:state.carReducer.ListCarCompra,
+        VlTotalProduto:state.carReducer.VlTotalProduto,
         hash:state.userReducer.hash,
         Endereco:state.carReducer.Endereco,
         VlTotalProduto:state.carReducer.VlTotalProduto,

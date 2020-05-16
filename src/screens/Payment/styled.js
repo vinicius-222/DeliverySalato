@@ -42,15 +42,19 @@ export const BodyFormaDePagamentoSubTotalText = styled.Text``;
 export const BodyFormaDePagamentoTrocoText = styled.TextInput`  
     width:auto;
     text-align:right;
+    height:20px;
+    padding:0px;
 `;
 export const BodyFormaDePagamentoSubTotalArea = styled.View`
     border-top-width:0.8px;
     border-top-color:#CCC;
     border-radius:5px;
+
     justify-content:space-between;
     align-items:center;
     flex-direction:row;
     padding:10px 15px;
+    
 
 `;
 export const BodyFormaDePagamentoTrocolArea = styled.View`

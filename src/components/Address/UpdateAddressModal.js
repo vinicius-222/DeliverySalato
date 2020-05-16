@@ -1,13 +1,18 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components/native';
 import { Platform, StyleSheet } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import DatePicker from 'react-native-datepicker';
 import useSalatoDeliveryAPI from '../../useSalatoDeliveryAPI';
-
+const ScrollContainer = styled.ScrollView`
+    flex:1;
+`;
 const Safe = styled.SafeAreaView`
     flex:1;
     background-color:#FFF;
+`;
+const KeyBordoSafeArea = styled.KeyboardAvoidingView`
+    flex:1;
 `;
 const Container = styled.View`
     margin-top:${props=>props.Platform.OS == 'ios' ? '0px' : '15px'};
@@ -133,25 +138,28 @@ const ModalCdUFArea = styled.View`
     border-bottom-width:0.5px;
     border-bottom-color:#FF0000;
     margin-left:10px;
+    padding:5px 5px;
 `;
 
 const DataPicker = styled.Picker`
-    color:#999;
+    color:#000;
     height:25px;
     width:100%;
-    font-size:17px;
-    margin-bottom:20px;
+    font-weight:bold;
+    margin-left:-5px;
+    font-size:24px;
+    margin-bottom:15px;
     margin-top:5px;
 `;
 
 const DataPickerUF = styled.Picker`
-    color:#999;
+    color:#000;
     height:25px;
-    padding:5px;
+    padding:0px;
     width:100%;
     font-size:17px;
     margin-top:5px;
-    margin-bottom:0px;
+    margin-bottom:-5px;
 `;
 const ButtonActionArea = styled.View`
     justify-content:center;
@@ -176,6 +184,11 @@ const ModalDsPontoDeReferenciaArea = styled.View`
     border-bottom-width:0.5px;
     border-bottom-color:#FF0000;
     padding:5px 5px;
+`;
+const ModalAraButtonSelect = styled.View`
+    height:50px;
+    width:50px;
+
 `;
 const UpdateAddressModal = (props) => {
     const [VisibleModalUF, setVisibleModalUF] = useState(false);
@@ -256,11 +269,12 @@ const UpdateAddressModal = (props) => {
         })
     }
 
+
     let TpEnderecoItems = listTpEndereco.map((v, k) => {
         return <DataPicker.Item key={k} value={k} label={v.label} />
     });
     let ListUFItems = listUf.map((v, k) => {
-        return <DataPicker.Item key={k} value={v.value} label={v.label} />
+        return <DataPicker.Item key={k} value={k} label={v.label} />
     });
     return(
         <ModalArea 
@@ -268,102 +282,116 @@ const UpdateAddressModal = (props) => {
             transparent={true}
             visible={props.visible}
         >
+            
             <Safe>
-                <Container Platform={Platform}>
-                    <ButtonActionClose onPress={()=>props.visibleAction(false)}>
-                        <Title>X</Title>
-                    </ButtonActionClose>
-                    <ModalNmDestinatarioArea>
-                        <ModalTitle>Quem Recebe</ModalTitle>
-                        <TxtLogradouro value={NmDestinatario} onChangeText={(i)=>setNmDestinatario(i)}/>
-                    </ModalNmDestinatarioArea>
-                    <ModalTpEnderecoArea>
-                        <ModalTitle>Tipo de Endereco</ModalTitle>
-                        {Platform.OS === 'ios' ?
-                        <RNPickerSelect
-                            style={
-                                Platform.OS === 'ios'
-                                  ? pickerSelectStyles.inputIOS
-                                  : pickerSelectStyles.inputAndroid
-                              }
-                            placeholder="Tipo de Endereco"
-                            value={TpEndereco}
-                            onValueChange={(value) => setTpEndereco(value)}
-                            items={listTpEndereco}
-                            
-                        />
-                        :
-                        <DataPicker 
-                            selectedValue={TpEndereco == null ? 0 : parseInt(TpEndereco)}  
-                            pickerSelectStyles={false}
-                            onValueChange={(itemValue, ItemIndex) => {setTpEndereco(ItemIndex)}}>
-                                {TpEnderecoItems}
-                        </DataPicker>}
-                    </ModalTpEnderecoArea>
-                    <ModalNmEnderecoArea>
-                        <ModalTitle>Nome Endereco  ex:Minha casa, Casa da minha tia, Casa do meu irmao</ModalTitle>
-                        <TxtLogradouro value={NmEndereco} onChangeText={(i)=>setNmEndereco(i)}/>
-                    </ModalNmEnderecoArea>
-                    <ModalDsLogradouroArea>
-                        <ModalDsLogradouroAreaText>
-                            <ModalTitle>Logradouro (*)</ModalTitle>
-                            <TxtLogradouro value={DsLogradouro} onChangeText={(i)=>setDsLogradouro(i)}/>
-                        </ModalDsLogradouroAreaText>
-                        <ModalNrNumeroAreaText>
-                            <ModalTitle>Numero (*)</ModalTitle>
-                            <TxtLogradouro value={NrNumero} keyboardType="numeric" onChangeText={(i)=>setNrNumero(i)}/>
-                        </ModalNrNumeroAreaText>
-                    </ModalDsLogradouroArea>
-                    <ModalDsCidadeDsBairroArea>
-                        <ModalDsBairro>
-                            <ModalTitle>Bairro (*)</ModalTitle>
-                            <TxtLogradouro value={DsBairro} onChangeText={(i)=>setDsBairro(i)}/>
-                        </ModalDsBairro>
-                        <ModalDsCidade>
-                            <ModalTitle>Cidade (*)</ModalTitle>
-                            <TxtLogradouro value={DsCidade} onChangeText={(i)=>setDsCidade(i)}/>
-                        </ModalDsCidade>
-                    </ModalDsCidadeDsBairroArea>
-                    <ModalDsCEPCdUFArea>
-                        <ModalDsCEPArea>
-                            <ModalTitle>CEP (*)</ModalTitle>
-                            <TxtLogradouro value={DsCEP} keyboardType="numeric" onChangeText={(i)=>setDsCEP(i)}/>
-                        </ModalDsCEPArea>
-                        <ModalCdUFArea>
-                            <ModalTitle>UF (*)</ModalTitle>
+                <ScrollContainer>
+                    <KeyBordoSafeArea>
+                        <Container Platform={Platform}>
+                            <ButtonActionClose onPress={()=>props.visibleAction(false)}>
+                                <Title>X</Title>
+                            </ButtonActionClose>
+                            <ModalNmDestinatarioArea>
+                                <ModalTitle>Quem Recebe</ModalTitle>
+                                <TxtLogradouro value={NmDestinatario} onChangeText={(i)=>setNmDestinatario(i)}/>
+                            </ModalNmDestinatarioArea>
+                            <ModalTpEnderecoArea>
+                                <ModalTitle>Tipo de Endereco</ModalTitle>
                                 {Platform.OS === 'ios' ?
                                 <RNPickerSelect
-                                    placeholder="selecion UF"
-                                    value={CdUF}
-                                    onValueChange={(value) => setCdUF(value)}
-                                    items={listUf}
-                                    style={
-                                        Platform.OS === 'ios'
-                                          ? pickerSelectStyles.inputIOS
-                                          : pickerSelectStyles.inputAndroid
-                                      }
+                                placeholder="Tipo de Endereco"
+                                style={{...pickerSelectStyles}}
+                                value={TpEndereco}
+                                onValueChange={(value) => setTpEndereco(value)}
+                                items={listTpEndereco}
+                                Icon = {() => {return(
+                                    <ModalAraButtonSelect
+                                        name="caret-down"
+                                        color={'black'}
+                                        size={35}
+                                        style={pickerSelectStyles.icon}
+                                        backgroundColor="transparent"
+                                        underlayColor="transparent"
+                                    >
+                                    </ModalAraButtonSelect>)}}
                                 />
                                 :
-                                <DataPickerUF 
-                                    selectedValue={CdUF}  
-                                    onValueChange={(itemValue, ItemIndex) => {
-                                        setCdUF(itemValue)
-                                        console.log(itemValue)
-                                    }}>
-                                        {ListUFItems}
-                                </DataPickerUF>}
-                        </ModalCdUFArea>
-                    </ModalDsCEPCdUFArea>
-                    <ModalDsPontoDeReferenciaArea>
-                        <ModalTitle>Ponto de Referencia (*)</ModalTitle>
-                        <TxtLogradouro value={DsPontoDeReferencia} onChangeText={(i)=>setDsPontoDeReferencia(i)}/>
-                    </ModalDsPontoDeReferenciaArea>
-                    <ButtonActionArea>
-                        <ButtonActionSalvar onPress={()=>HandleSalvar()}>
-                            <ButtonText>Salvar</ButtonText>
-                        </ButtonActionSalvar>
-                    </ButtonActionArea>
-                </Container>
+                                <DataPicker 
+                                    selectedValue={TpEndereco == null ? 0 : parseInt(TpEndereco)}  
+                                    pickerSelectStyles={false}
+                                    onValueChange={(itemValue, ItemIndex) => {setTpEndereco(ItemIndex)}}>
+                                        {TpEnderecoItems}
+                                </DataPicker>}
+                            </ModalTpEnderecoArea>
+                            <ModalNmEnderecoArea>
+                                <ModalTitle>Nome Endereco  ex:Minha casa, Casa da minha tia, Casa do meu irmao</ModalTitle>
+                                <TxtLogradouro value={NmEndereco} onChangeText={(i)=>setNmEndereco(i)}/>
+                            </ModalNmEnderecoArea>
+                            <ModalDsLogradouroArea>
+                                <ModalDsLogradouroAreaText>
+                                    <ModalTitle>Logradouro (*)</ModalTitle>
+                                    <TxtLogradouro value={DsLogradouro} onChangeText={(i)=>setDsLogradouro(i)}/>
+                                </ModalDsLogradouroAreaText>
+                                <ModalNrNumeroAreaText>
+                                    <ModalTitle>Numero (*)</ModalTitle>
+                                    <TxtLogradouro value={NrNumero} keyboardType="numeric" onChangeText={(i)=>setNrNumero(i)}/>
+                                </ModalNrNumeroAreaText>
+                            </ModalDsLogradouroArea>
+                            <ModalDsCidadeDsBairroArea>
+                                <ModalDsBairro>
+                                    <ModalTitle>Bairro (*)</ModalTitle>
+                                    <TxtLogradouro value={DsBairro} onChangeText={(i)=>setDsBairro(i)}/>
+                                </ModalDsBairro>
+                                <ModalDsCidade>
+                                    <ModalTitle>Cidade (*)</ModalTitle>
+                                    <TxtLogradouro value={DsCidade} onChangeText={(i)=>setDsCidade(i)}/>
+                                </ModalDsCidade>
+                            </ModalDsCidadeDsBairroArea>
+                            <ModalDsCEPCdUFArea>
+                                <ModalDsCEPArea>
+                                    <ModalTitle>CEP (*)</ModalTitle>
+                                    <TxtLogradouro value={DsCEP} keyboardType="numeric" onChangeText={(i)=>setDsCEP(i)}/>
+                                </ModalDsCEPArea>
+                                <ModalCdUFArea>
+                                    <ModalTitle>UF (*)</ModalTitle>
+                                        {Platform.OS === 'ios' ?
+                                        <RNPickerSelect
+                                        height={19}
+                                        placeholder="selecion UF"
+                                        style={{...pickerSelectStyles}}
+                                        value={CdUF}
+                                        onValueChange={(value) => setCdUF(value)}
+                                        items={listUf}
+                                        Icon = {() => {return(
+                                            <ModalAraButtonSelect
+                                                name="caret-down"
+                                                color={'black'}
+                                                size={35}
+                                                style={pickerSelectStyles.icon}
+                                                underlayColor="transparent"
+                                            >
+                                            </ModalAraButtonSelect>)}}
+                                        />
+                                        :
+                                        <DataPickerUF 
+                                            selectedValue={CdUF == null ? 0 : parseInt(CdUF)}  
+                                            pickerSelectStyles={false}
+                                            onValueChange={(itemValue, ItemIndex) => setCdUF(ItemIndex)}>
+                                                {ListUFItems}
+                                        </DataPickerUF>}
+                                </ModalCdUFArea>
+                            </ModalDsCEPCdUFArea>
+                            <ModalDsPontoDeReferenciaArea>
+                                <ModalTitle>Ponto de Referencia (*)</ModalTitle>
+                                <TxtLogradouro value={DsPontoDeReferencia} onChangeText={(i)=>setDsPontoDeReferencia(i)}/>
+                            </ModalDsPontoDeReferenciaArea>
+                            <ButtonActionArea>
+                                <ButtonActionSalvar onPress={()=>HandleSalvar()}>
+                                    <ButtonText>Salvar</ButtonText>
+                                </ButtonActionSalvar>
+                            </ButtonActionArea>
+                        </Container>
+                    </KeyBordoSafeArea>
+                </ScrollContainer>
             </Safe>
         </ModalArea>
     )
@@ -371,25 +399,26 @@ const UpdateAddressModal = (props) => {
 
 const pickerSelectStyles = StyleSheet.create({
     inputIOS: {
-      fontSize: 16,
-      paddingVertical: 12,
-      paddingHorizontal: 10,
-      borderWidth: 1,
-      borderColor: 'gray',
+      fontSize:17,
+      marginTop:5,
       borderRadius: 4,
-      color: 'black',
+      color:'black',
       paddingRight: 30, // to ensure the text is never behind the icon
     },
-    inputAndroid: {
-      fontSize: 16,
-      paddingHorizontal: 10,
-      paddingVertical: 8,
-      borderWidth: 0.5,
-      borderColor: 'purple',
-      borderRadius: 8,
-      color: 'black',
-      paddingRight: 30, // to ensure the text is never behind the icon
+    icon:{
+        position: 'absolute',
+		backgroundColor: 'transparent',
+		borderTopWidth: 5,
+		borderTopColor: '#000',
+		borderRightWidth: 5,
+		borderRightColor: 'transparent',
+		borderLeftWidth: 5,
+		borderLeftColor: 'transparent',
+		width: 0,
+		height: 0,
+		top: 10,
+		right: 15,
     },
-  });
+});
 
 export default UpdateAddressModal;

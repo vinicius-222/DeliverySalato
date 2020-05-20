@@ -1,14 +1,13 @@
 import React,{ useState, useEffect, useRef } from 'react';
 import { Platform, Picker, StyleSheet } from 'react-native'
 import styled from 'styled-components/native';
-import Geocoder from 'react-native-geocoding';
-import Geolocation from '@react-native-community/geolocation';
-import { MapsAPI } from '../../config';
 import useSalatoDeliveryAPI from '../../useSalatoDeliveryAPI';
 import RNPickerSelect from 'react-native-picker-select';
+import MapAddress from './MapAddress';
 import Loading from '../Loading';
 import { CEPMask } from '../Mask';
 const ScroollContainer = styled.ScrollView`
+    margin-bottom:20px;
     flex:1;
 `;
 const Safe = styled.SafeAreaView`
@@ -193,8 +192,8 @@ const ModalAraButtonSelect = styled.View`
 
 `;
 let timer;
+let timerMap;
 const InsertAddressModal = (props) => {
-    const favSport1 = useRef(null);
     const api = useSalatoDeliveryAPI(props);
     const [loading, setLoading] = useState(false);
     const [TpEndereco, setTpEndereco] = useState('');
@@ -208,6 +207,8 @@ const InsertAddressModal = (props) => {
     const [CEPEndereco, setCEPEndereco] = useState('');
     const [DsPontoDeReferencia, setDsPontoDeReferencia] = useState();
     const [NmEndereco, setNmEndereco] = useState();
+    const [geometry, setGeometry] = useState({});
+    const [carregaLatLng, setcarregaLatLng] = useState(false);
     const [listUf, setListUF] = useState([{label:'AC', value:'AC'},
                                           {label:'AM', value:'AM'},
                                           {label:'RR', value:'RR'},
@@ -309,6 +310,21 @@ const InsertAddressModal = (props) => {
     },[CEPEndereco]);
 
     useEffect(()=>{
+        if (timerMap){
+            clearTimeout(timerMap);
+        }
+
+        setTimeout(async()=>{
+            if (DsLogradouro !== ''){
+                const end = await api.getPositionEndereco(`${DsLogradouro} ${NrNumero}, ${DsBairro} - ${DsCidade} ${CdUF} ${DsCEP}`);
+                setcarregaLatLng(true);
+                setGeometry(end);
+            }
+        },1000)
+
+    },[DsLogradouro, DsBairro, DsCidade, DsCEP, CdUF, NrNumero ])
+    
+    useEffect(()=>{
         if (props.StGeolocation){
             setDsLogradouro(props.data[0]);
             setNrNumero(props.data[1]);
@@ -330,6 +346,7 @@ const InsertAddressModal = (props) => {
             setCdUF(arrUF);
             setTpEndereco(arrTpEndereco);
         }
+
     },[])
 
     const LimpaCampos = () =>{ 
@@ -343,12 +360,12 @@ const InsertAddressModal = (props) => {
         setCdUF('')
         setCEPEndereco('')
         setDsPontoDeReferencia('')
-        setNmEndereco('')
+        setNmEndereco('');
+        setcarregaLatLng(false);
+        setGeometry({});
+
     }
 
-    useEffect(()=>{
-        console.log(CdUF)
-    },[CdUF])
     let TpEnderecoItems = listTpEndereco.map((v, k) => {
         return <Picker.Item key={k} value={k} label={v.label} />
     });
@@ -470,6 +487,7 @@ const InsertAddressModal = (props) => {
                                 <ModalTitle>Ponto de Referencia (*)</ModalTitle>
                                 <TxtLogradouro value={DsPontoDeReferencia} onChangeText={(i)=>setDsPontoDeReferencia(i)}/>
                             </ModalDsPontoDeReferenciaArea>
+                            <MapAddress geometry={geometry} carregaInfo={carregaLatLng} />
                             <ButtonActionArea>
                                 <ButtonActionSalvar onPress={()=>HandleSalvar()}>
                                     <ButtonText>Salvar</ButtonText>

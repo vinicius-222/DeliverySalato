@@ -1,12 +1,12 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { StatusBar, ActivityIndicator, Platform } from 'react-native';
-import MapView from 'react-native-maps';
+import { StatusBar, ActivityIndicator, Platform, Dimensions } from 'react-native';
+import MapView , {PROVIDER_GOOGLE, Polygon, Circle } from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 import Geocoder from 'react-native-geocoding';
 import MapViewDirections from 'react-native-maps-directions';
 import { MapsAPI } from '../../config';
-import useDevsUberApi from '../../useDevsUberApi';
-import AddressModal from '../../components/AddressModal';
+import useSalatoDeliveryAPI from '../../useSalatoDeliveryAPI';
+import AddressModal from '../../components/Address/AddressModal';
 import DriverModal from '../../components/DriverModal';
 import {
     Container,
@@ -33,20 +33,71 @@ import {
 
 const Page = (props) => {
     const map = useRef();
-    const api = useDevsUberApi();
-
-    const [mapLoc, setMapLoc] = useState({
-        center:{
-            latitude:-22.5832,
-            longitude:-43.0565
+    const api = useSalatoDeliveryAPI();
+    const { width, height } = Dimensions.get('window');
+    const ASPECT_RATIO = width / height;
+    const [polygon, setPoygon]  = useState([
+        {
+            latitude: -22.666489,
+            longitude: -43.039147
         },
-        zoom:17,
+        {
+            latitude: -22.671901,
+            longitude: -43.034527
+        },
+        {
+            latitude: -22.667332, 
+            longitude: -43.025091
+        },
+        {
+            latitude: -22.661063, 
+            longitude:-43.024608
+        },
+        {
+            latitude: -22.651241,
+            longitude:  -43.021947
+        },
+        {
+            latitude: -22.639438, 
+            longitude: -43.028127
+        },
+        {
+            latitude: -22.638408, 
+            longitude:  -43.033191
+        },
+        {
+            latitude: -22.646884,
+            longitude:  -43.043919
+        },
+        {
+            latitude: -22.651399,
+            longitude:  -43.051601
+        },
+        {
+            latitude:  -22.659558,
+            longitude:  -43.051430
+        }, 
+    ]);
+    const [fromLoc, setFromLoc] = useState({
+        center:{ 
+            latitude: -22.662266,
+            longitude:-43.050184
+        },
+        zoom:14,
         pitch:0,
         altitude:0,
         heading:0
     });
-    const [fromLoc, setFromLoc] = useState({});
-    const [toLoc, setToLoc] = useState({});
+    const [toLoc, setToLoc] = useState({
+        center:{ 
+            latitude: -22.657159,
+            longitude:-43.038190
+        },
+        zoom:14,
+        pitch:0,
+        altitude:0,
+        heading:0
+    });
     const [showDirections, setShowDirections] = useState(false);
     const [requestDistance, setRequestDistance] = useState(0);
     const [requestTime, setRequestTime] = useState(0);
@@ -61,6 +112,28 @@ const Page = (props) => {
 
     const [loading, setLoading] = useState(false);
     const [changeMap, setChangeMap] =  useState(false);
+
+    const [mapLoc, setMapLoc] = useState({
+        center:{
+            latitude:-22.657159,
+            longitude:-43.038190
+        },
+        zoom:14,
+        pitch:0,
+        altitude:0,
+        heading:0
+    });
+
+    const [mapLocPolygno, setmapLocPolygno] = useState({
+        center:{
+            LATITUDE:-22.5832,
+            LONGETUDE:-43.0565
+        },
+        zoom:17,
+        pitch:0,
+        altitude:0,
+        heading:0
+    });
 
     useEffect(()=>{
         Geocoder.init(MapsAPI, {language:'pt-br'});
@@ -97,8 +170,8 @@ const Page = (props) => {
                     heading:0
                 };
 
-                setMapLoc(loc);
-                setFromLoc(loc);
+                //setMapLoc(loc);
+                //setFromLoc(mapLoc);
 
             }
 
@@ -175,8 +248,6 @@ const Page = (props) => {
             setChangeMap(true);
         }
         setMapLoc(cam);
-        console.log(mapLoc);
-        console.log(cam);
     }
 
     const handleModalClick = (field, address) => {
@@ -186,7 +257,7 @@ const Page = (props) => {
                 latitude:address.latitude,
                 longitude:address.longitude
             },
-            zoom:18,
+            zoom:14,
             pitch:0,
             altitude:0,
             heading:0
@@ -230,7 +301,7 @@ const Page = (props) => {
                 visible={driverModalVisible}
                 visibleAction={setDriverModalVisible}
             />
-            <AddressModal
+             <AddressModal
                 title={modalTitle}
                 visible={modalVisible}
                 visibleAction={setModalVisible}
@@ -245,12 +316,19 @@ const Page = (props) => {
                 onRegionChangeComplete={handleMapChange}
             >
 
+                <Polygon
+                    coordinates={polygon}
+                    fillColor="#00FF00"
+                    strokeColor="rgba(0,0,0,0.5)"
+                    strokeWidth={1}
+                    
+                />
                 {fromLoc.center &&
-                    <MapView.Marker identifier={'mk1'} pinColor="black" coordinate={fromLoc.center} />
+                    <MapView.Marker identifier={'mk1'} pinColor="red" coordinate={fromLoc.center} />
                 }
 
                 {toLoc.center &&
-                    <MapView.Marker identifier={'mk2'} pinColor="black" coordinate={toLoc.center} />
+                    <MapView.Marker identifier={'mk2'} pinColor="green" coordinate={toLoc.center} />
                 }
 
                 {showDirections &&
@@ -258,7 +336,7 @@ const Page = (props) => {
                         origin={fromLoc.center}
                         destination={toLoc.center}
                         strokeWidth={5}
-                        strokeColor="black"
+                        strokeColor="#FF0000"
                         apikey={MapsAPI}
                         onReady={handleDirectionsReady}
                     />
@@ -268,7 +346,9 @@ const Page = (props) => {
             <MenuArea onPress={handleMenu} underlayColor="transparent">
                 <MenuImage source={require('../../assets/images/menu.png')} />
             </MenuArea>
+           
             <IntineraryArea>
+                {loading &&  
                 <IntineraryItem onPress={handleFromClick} underlayColor="#EEE">
                     <>
                         <IntineraryLabel>
@@ -282,7 +362,8 @@ const Page = (props) => {
                             <IntineraryPlaceHolder>Escolha um local de origem</IntineraryPlaceHolder>
                         }
                     </>
-                </IntineraryItem>
+                </IntineraryItem>}
+                {loading &&  
                 <IntineraryItem onPress={handleToClick} underlayColor="#EEE">
                     <>
                         <IntineraryLabel>
@@ -296,7 +377,7 @@ const Page = (props) => {
                             <IntineraryPlaceHolder>Escolha um local de destino</IntineraryPlaceHolder>
                         }
                     </>
-                </IntineraryItem>
+                </IntineraryItem>}
                 {fromLoc.center && toLoc.center &&
                     <IntineraryItem>
                         <>
@@ -314,6 +395,7 @@ const Page = (props) => {
                                     <RequestValue>{requestPrice > 0?`R$ ${requestPrice.toFixed(2)}`:'--'}</RequestValue>
                                 </RequestDetail>
                             </RequestDetails>
+                            {loading &&  
                             <RequestButtons>
                                 <RequestButton color="#00FF00" onPress={handleRequestGo}>
                                     <RequestButtonText>Solicitar Motorista</RequestButtonText>
@@ -321,7 +403,7 @@ const Page = (props) => {
                                 <RequestButton color="#FF0000" onPress={handleRequestCancel}>
                                     <RequestButtonText>Cancelar</RequestButtonText>
                                 </RequestButton>
-                            </RequestButtons>
+                            </RequestButtons>}
                         </>
                     </IntineraryItem>
                 }
@@ -340,5 +422,4 @@ const Page = (props) => {
         </Container>
     );
 }
-
 export default Page;

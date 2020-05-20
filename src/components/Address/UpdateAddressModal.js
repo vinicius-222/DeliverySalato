@@ -4,6 +4,7 @@ import { Platform, StyleSheet } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import DatePicker from 'react-native-datepicker';
 import useSalatoDeliveryAPI from '../../useSalatoDeliveryAPI';
+import MapAddress from './MapAddress';
 const ScrollContainer = styled.ScrollView`
     flex:1;
 `;
@@ -18,6 +19,7 @@ const Container = styled.View`
     margin-top:${props=>props.Platform.OS == 'ios' ? '0px' : '15px'};
     padding:0px 15px;
     background-color:#FFF;
+    margin-bottom:20px;
 `;
 const Title = styled.Text`
     color:#FFF;
@@ -191,6 +193,7 @@ const ModalAraButtonSelect = styled.View`
 
 `;
 const UpdateAddressModal = (props) => {
+    const api = useSalatoDeliveryAPI();
     const [VisibleModalUF, setVisibleModalUF] = useState(false);
     const [DsLogradouro, setDsLogradouro] = useState(props.data.DsLogradouro);
     const [NrNumero, setNrNumero] = useState(props.data.NrNumero);
@@ -201,6 +204,8 @@ const UpdateAddressModal = (props) => {
     const [DsPontoDeReferencia, setDsPontoDeReferencia] = useState(props.data.DsPontoDeReferencia);
     const [NmEndereco, setNmEndereco] = useState(props.data.NmEndereco);
     const [CdUF, setCdUF] = useState(props.data.CdUF);
+    const [geometry, setGeometry] = useState({});
+    const [carregaLatLng, setcarregaLatLng] = useState(false);
     const [listUf, setListUF] = useState([{label:'AC', value:'AC'},
                                           {label:'AM', value:'AM'},
                                           {label:'RR', value:'RR'},
@@ -268,6 +273,21 @@ const UpdateAddressModal = (props) => {
             }
         })
     }
+
+    useEffect(()=>{
+
+        const getEndereco = async() =>{
+            if (DsLogradouro !== ''){
+                const end = await api.getPositionEndereco(`${DsLogradouro} ${NrNumero}, ${DsBairro} - ${DsCidade} ${CdUF} ${DsCEP}`);
+                setcarregaLatLng(true);
+                setGeometry(end);
+                console.log(end)
+            }
+        }
+
+        getEndereco();
+       
+    },[DsLogradouro, DsBairro, DsCidade, DsCEP, CdUF, NrNumero ])
 
 
     let TpEnderecoItems = listTpEndereco.map((v, k) => {
@@ -384,6 +404,7 @@ const UpdateAddressModal = (props) => {
                                 <ModalTitle>Ponto de Referencia (*)</ModalTitle>
                                 <TxtLogradouro value={DsPontoDeReferencia} onChangeText={(i)=>setDsPontoDeReferencia(i)}/>
                             </ModalDsPontoDeReferenciaArea>
+                            <MapAddress geometry={geometry} carregaInfo={carregaLatLng} />
                             <ButtonActionArea>
                                 <ButtonActionSalvar onPress={()=>HandleSalvar()}>
                                     <ButtonText>Salvar</ButtonText>

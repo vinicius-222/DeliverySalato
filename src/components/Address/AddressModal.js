@@ -173,7 +173,6 @@ const AddressModal = (props) => {
 
     useEffect(async()=>{
         setMeusEndereco(props.MeusEnderecos);
-
         if(props.EnderecoAtivo.length > 0){
             props.clickAction(false, props.EnderecoAtivo);
         }else{
@@ -182,6 +181,22 @@ const AddressModal = (props) => {
         }
     
     }, []);
+
+    useEffect(()=> {
+        const getArea = async() => {
+            const area = await api.getAreaEntrega();
+            props.setPolygonCordenates(area);
+        }
+
+        const getLocationLoja = async () =>{
+            const loja = await api.getLocationLoja();
+            props.setMapCameraLocation(loja);
+        }
+        
+        getLocationLoja();
+        getArea();
+        
+    },[])
 
     const handleCloseAction = () => {
         props.visibleAction(false);
@@ -243,7 +258,6 @@ const AddressModal = (props) => {
         arr[k].NmDestinatario = NmDestinatario;
         setMeusEndereco(arr);
         const json = await api.updateEndereco(props.jwt, IdEndereco, DsLogradouro, DsBairro, DsCidade, NrNumero, DsCEP, CdUF, StEntrega, TpEndereco, NmEndereco, DsPontoDeReferencia, NmDestinatario );
-        console.log(json);
         if (!json.error){
             alert("registor atulizado!!");
         }
@@ -370,6 +384,8 @@ const mapDispatchToProps = (dispatch) => {
         setGeoLocation:(GeoEndereco)=>dispatch({type:'SET_GEOENDERECO', payload:{GeoEndereco}}),
         setMeusEnderecos:(MeusEnderecos)=>dispatch({type:'SET_MEUSENDERECOS', payload:{MeusEnderecos}}),
         setEnderecoAtivo:(EnderecoAtivo)=>dispatch({type:'SET_ENDERECOATIVO', payload:{EnderecoAtivo}}),
+        setPolygonCordenates:(PolygonCordenates)=>dispatch({type:'SET_POLYGONCORDENATES', payload:{PolygonCordenates}}),
+        setMapCameraLocation:(MapCameraLocation)=>dispatch({type:'SET_MAPCAMERALOCATION', payload:{MapCameraLocation}}),
     }
 }
 

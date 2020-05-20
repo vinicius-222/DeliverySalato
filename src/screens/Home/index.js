@@ -1,10 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
-import { StackActions, NavigationActions } from 'react-navigation';
 import { Dimensions } from 'react-native';
-import AddressModal from '../../components/Address/AddressModal';
+import Loading from '../../components/Loading';
 import useSalatoDeliveryAPI, { BASEAPIIMAGE } from '../../useSalatoDeliveryAPI';
-import { Button } from 'react-native';
 import { SignOut } from '../../helpers/AuthHandler';
 
 
@@ -14,7 +12,10 @@ import {
     BodyArea,
     Imagen,
     Logo,
-    Texto
+    Texto,
+    AreaScroll,
+    AreaMaps,
+    ButtonMaps
 } from './styled';
  
 const BASE = BASEAPIIMAGE;
@@ -26,6 +27,7 @@ const Home = (props) =>{
     const MonthRef = useRef();
     const [ProductsInfo, setProductsInfo] = useState('Teste');
     const [selectedMonth, setSelectedMonth] = useState();
+    const [LoadActive, setLoadActive] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [widthImagemPlatform, setwidthImagemPlatform] = useState(0);
 
@@ -57,6 +59,7 @@ const Home = (props) =>{
     }
     
     const getCountCar = async () =>{
+        setLoadActive(true);
         const json = await api.getCountCar(
             props.jwt,
             props.hash
@@ -84,26 +87,6 @@ const Home = (props) =>{
         props.setListCategory(r.GrupoProduto);
     }
 
-    const location = async () =>{
-        const geo = await api.getCurrentLocation();
-        props.setGeoLocation(geo);
-    }
-
-    const getMeusEnderecos = async () => {
-        const json = await api.getEndereco(
-            props.jwt
-        )
-        props.setMeusEnderecos(json.InfoEndereco);
-
-        let key = json.InfoEndereco.findIndex((item)=> item.StEntrega == 1);
-
-        if (key > -1){
-            let item = json.InfoEndereco[key];
-            let DsEndereco = `${item.DsLogradouro}, ${item.NrNumero} - ${item.DsBairro} , ${item.DsCidade} / ${item.CdUF} - CEP:${item.DsCEP}`;
-            props.setEnderecoAtivo(DsEndereco);
-        }
-
-    }
 
     useEffect(() =>{ 
         getCountCar();
@@ -111,29 +94,29 @@ const Home = (props) =>{
         handleGetCategoria();
         getInfoProduto();
         getInfoUsuario();
-        location();
-        getMeusEnderecos();
         let s  = screenWidth - 24;
         setwidthImagemPlatform(s);
     },[])
 
     return(
         <Container>
-            <HeaderCategoria
-                ref={MonthRef}
-                horizontal={true}
-                showsHorizontalScrollIndicator={false}
-                decelerationRate="fast"
-                snapToInterval={thirdW}
-                contentContainerStyle={{}}
-                onMomentumScrollEnd={handleScrollEnd}
-            >
-                <BodyArea>
-                    <Imagen height={widthImagemPlatform} source={{uri:'http://138.99.15.234:20003/images/WhatsApp%20Image%202019-09-19%20at%2016.49.26.jpeg'}}/>
-                    <Imagen height={widthImagemPlatform} source={{uri:'http://138.99.15.234:20003/images/WhatsApp%20Image%202019-09-19%20at%2016.49.26%20(1).jpeg'}}/>
-                    <Imagen height={widthImagemPlatform} source={{uri:'http://138.99.15.234:20003/images/WhatsApp%20Image%202019-09-19%20at%2016.49.26%20(2).jpeg'}}/>
-                </BodyArea>
-            </HeaderCategoria>
+            <AreaScroll>
+                <HeaderCategoria
+                    ref={MonthRef}
+                    horizontal={true}
+                    showsHorizontalScrollIndicator={false}
+                    decelerationRate="fast"
+                    snapToInterval={thirdW}
+                    contentContainerStyle={{}}
+                    onMomentumScrollEnd={handleScrollEnd}
+                >
+                    <BodyArea>
+                        <Imagen height={widthImagemPlatform} source={{uri:'http://138.99.15.234:20003/images/WhatsApp%20Image%202019-09-19%20at%2016.49.26.jpeg'}}/>
+                        <Imagen height={widthImagemPlatform} source={{uri:'http://138.99.15.234:20003/images/WhatsApp%20Image%202019-09-19%20at%2016.49.26%20(1).jpeg'}}/>
+                        <Imagen height={widthImagemPlatform} source={{uri:'http://138.99.15.234:20003/images/WhatsApp%20Image%202019-09-19%20at%2016.49.26%20(2).jpeg'}}/>
+                    </BodyArea>
+                </HeaderCategoria>
+            </AreaScroll>
         </Container>
     )   
 }

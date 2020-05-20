@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Modal } from 'react-native';
 import styled from 'styled-components/native';
 import { AirbnbRating } from 'react-native-ratings';
-import useDevsUberApi from '../useDevsUberApi';
+import useSalatoDeliveryAPI from '../useSalatoDeliveryAPI';
 
 const ModalArea = styled.View`
 flex:1;
@@ -77,7 +77,7 @@ color:#000;
 `;
 
 export default (props) => {
-    const api = useDevsUberApi();
+    const api = useSalatoDeliveryAPI();
 
     const [showStars, setShowStars] = useState(false);
 

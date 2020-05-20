@@ -4,6 +4,7 @@ import { createAppContainer } from "react-navigation";
 import Home from '../screens/Home';
 import Checkout from '../screens/Checkout';
 import CarCompra from '../screens/CarCompra';
+import MapLocation from '../screens/MapLocation';
 
 export default createAppContainer(createStackNavigator({
     Home:{
@@ -14,7 +15,11 @@ export default createAppContainer(createStackNavigator({
     Checkout:{
         screen:Checkout,
         title:'Checkout'
-    }
+    },
+    MapLocation:{
+        screen:MapLocation,
+        title:'Checkout'
+    },
 },{
     defaultNavigationOptions:{
         headerShown:true,

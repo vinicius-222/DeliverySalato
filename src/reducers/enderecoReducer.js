@@ -1,7 +1,9 @@
 const initialState = {
     MeusEnderecos:[],
     EnderecoAtivo:[],
-    GeoEndereco:[]
+    GeoEndereco:[],
+    PolygonCordenates:[],
+    MapCameraLocation:{}
 }
 
 export default (state = initialState, action) =>{
@@ -15,6 +17,12 @@ export default (state = initialState, action) =>{
             break;
         case 'SET_GEOENDERECO':
             return {...state, GeoEndereco:action.payload.GeoEndereco};
+            break;
+        case 'SET_POLYGONCORDENATES':
+            return {...state, PolygonCordenates:action.payload.PolygonCordenates};
+            break;
+        case 'SET_MAPCAMERALOCATION':
+            return {...state, MapCameraLocation:action.payload.MapCameraLocation};
             break;
     }   
 

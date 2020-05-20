@@ -4,6 +4,9 @@ export const Container = styled.SafeAreaView`
     flex:1;
     background-color:#FFF;
 `;
+export const AreaScroll = styled.ScrollView`
+    flex:1;
+`;
 export const HeaderCategoria = styled.ScrollView`
     width:100%;
 `;
@@ -27,3 +30,11 @@ export const Logo = styled.Image`
     resizeMode:contain;
 `;
 export const Texto = styled.Text``;
+export const AreaMaps = styled.View`
+    height:50px;
+    width:100%;
+`;
+export const ButtonMaps = styled.Button`
+    height:100%;
+    width:100%;
+`;

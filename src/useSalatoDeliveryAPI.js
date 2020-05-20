@@ -271,7 +271,7 @@ const useSalatoDeliveryAPI = (props) => ({
                     error:''
                 };
 
-                json.price = distance * 7;
+                json.price = distance * 3;
 
                 resolve(json);
             }, 1000);
@@ -492,6 +492,92 @@ const useSalatoDeliveryAPI = (props) => ({
         })
     },
 
+    getPositionEndereco:async(CdCEP)=>{
+        const json = await Geocoder.from(CdCEP);
+        return json.results[0].geometry.location
+    },
+
+    getAreaEntrega:async()=>{
+        return new Promise((resolve, reject)=>{
+            setTimeout(()=>{
+                const end = [
+                    {
+                        latitude: -22.666489,
+                        longitude: -43.039147
+                    },
+                    {
+                        latitude: -22.671901,
+                        longitude: -43.034527
+                    },
+                    {
+                        latitude: -22.667332, 
+                        longitude: -43.025091
+                    },
+                    {
+                        latitude: -22.661063, 
+                        longitude:-43.024608
+                    },
+                    {
+                        latitude: -22.651241,
+                        longitude:  -43.021947
+                    },
+                    {
+                        latitude: -22.639438, 
+                        longitude: -43.028127
+                    },
+                    {
+                        latitude: -22.638408, 
+                        longitude:  -43.033191
+                    },
+                    {
+                        latitude: -22.646884,
+                        longitude:  -43.043919
+                    },
+                    {
+                        latitude: -22.651399,
+                        longitude:  -43.051601
+                    },
+                    {
+                        latitude:  -22.659558,
+                        longitude:  -43.051430
+                    }, 
+                ]
+                resolve (end);
+            },500);
+        })
+    },
+
+    getRequestPrice:async(Distnce) => {
+        return new Promise((resolve, reject) => {
+            setTimeout(()=>{
+                let Price = {
+                    error:''
+                };
+                let p = 6 * Distnce;
+                Price.valor = p;
+                resolve(Price);
+            },1000 )
+        })
+    },
+
+    getLocationLoja:async() => {
+        return new Promise((resolve, reject)=>{
+            setTimeout(()=>{
+                const loja = {
+                    center:{ 
+                        latitude: -22.657147932062127,
+                        longitude:-43.03820516914129
+                    },
+                    zoom:14,
+                    pitch:0,
+                    altitude:0,
+                    heading:0
+                }
+                resolve(loja);
+            },500);
+        })
+    },
+    
     sendPedidoDeVenda:async(IdPedidoDeVenda, CdChamada, DtPedido, DtEntrega, IdEmpresa, VlPedido,TpPedido, IdCondicaoPagamento, VlTotalPedido,itensPedido, DsObservacao, jwt) => {
         const json = await apiFetchPost(
             '/pedidovenda/sendPedidosDelivery',

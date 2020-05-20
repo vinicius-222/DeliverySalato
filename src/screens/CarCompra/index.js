@@ -371,6 +371,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) =>{
     return{
         delcarCompra:(ListCarCompra)=>dispatch({type:'DELETE_LISTCARCOMPRA', payload:{ListCarCompra}}),
+        setGeoLocation:(GeoEndereco)=>dispatch({type:'SET_GEOENDERECO', payload:{GeoEndereco}}),
         setClearJwt:(jwt)=>dispatch({type:'SET_JWT', payload:{jwt}}),
         incCarCompra:(ListCarCompra)=>dispatch({type:'INCREMENT_LISTCARCOMPRA', payload:{ListCarCompra}}),
         decCarCompra:(ListCarCompra)=>dispatch({type:'DECREMENT_LISTCARCOMPRA', payload:{ListCarCompra}}),

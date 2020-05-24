@@ -73,8 +73,10 @@ const EditModal = (props) => {
         }
     }
     
-    const ActionUpdateEndereco = (IdEndereco, DsLogradouro, DsBairro, DsCidade, NrNumero, DsCEP, CdUF, StEntrega, TpEndereco, NmEndereco, DsPontoDeReferencia, NmDestinatario, k) => {
-        props.ActionUpdateClick(IdEndereco, DsLogradouro, DsBairro, DsCidade, NrNumero, DsCEP, CdUF, StEntrega, TpEndereco, NmEndereco, DsPontoDeReferencia, NmDestinatario, k);
+    const ActionUpdateEndereco = (IdEndereco, DsLogradouro, DsBairro, DsCidade, NrNumero, DsCEP, CdUF, StEntrega,
+                                  TpEndereco, NmEndereco, DsPontoDeReferencia, NmDestinatario, k, DsLatitude, DsLongitude, NrDistancia, NrTempo, VlValor) => {
+        props.ActionUpdateClick(IdEndereco, DsLogradouro, DsBairro, DsCidade, NrNumero, DsCEP, CdUF, StEntrega, 
+                                TpEndereco, NmEndereco, DsPontoDeReferencia, NmDestinatario, k, DsLatitude, DsLongitude, NrDistancia, NrTempo, VlValor);
         props.visibleAction(false);
     }
 

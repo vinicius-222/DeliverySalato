@@ -13,10 +13,10 @@ const HeaderTitle = styled.Text`
 `;
 
 const HeaderPerfil = (props) => {
-    
+  
     return(
         <Container>
-            <HeaderTitle>Olá, {props.infoUsuario.InfoUsuario[0].NmPessoa}</HeaderTitle>
+            <HeaderTitle>Olá, {props.infoUsuario[0].NmPessoa}</HeaderTitle>
         </Container>
     )
 }

@@ -35,16 +35,13 @@ const Perfil = (props) =>{
                                                     {nome:'União Estavel', id:5},
                                                     {nome:'Outros', id:6}
                                                     ]);
+  
 
-    const getInfoUsuario = async () =>{
-        const json = await api.getUsuario(props.jwt, props.hash);
-        props.setInfoUsuario(json)
-
-    }      
-    useEffect(()=>{
-        getInfoUsuario();
-    },[])    
-
+    const SingOut = () => {
+        props.setEndereco('')
+        props.setEnderecoAtivo([])
+        props.setSignOut()
+    }
     useEffect(()=> {
         if (!props.jwt){
             props.navigation.dispatch(StackActions.reset({
@@ -57,7 +54,7 @@ const Perfil = (props) =>{
     },[props.jwt]);
 
     useEffect(()=>{
-        switch(props.infoUsuario.InfoUsuario[0].TpEstadoCivil){
+        switch(EstadoCivil == 'r'){
             case 'C':
                 setEstadoCivil(2);
                 break;
@@ -82,19 +79,19 @@ const Perfil = (props) =>{
     return(
         <Safe>
             <Container>
+                <HeaderArea onPress={()=>props.navigation.navigate('Conta')} underlayColor='#EEE'> 
+                    <HeaderTitle>Perfil</HeaderTitle>
+                </HeaderArea>
                 <HeaderArea onPress={()=>props.navigation.navigate('Senha')} underlayColor='#EEE'>
                     <HeaderTitle>Senha</HeaderTitle>
                 </HeaderArea>
                 <HeaderArea onPress={()=>props.navigation.navigate('Email')} underlayColor='#EEE'>
                     <HeaderTitle>Email</HeaderTitle>
                 </HeaderArea>
-                <HeaderArea onPress={()=>props.navigation.navigate('ContaItem')} underlayColor='#EEE'> 
-                    <HeaderTitle>Perfil</HeaderTitle>
-                </HeaderArea>
                 <HeaderArea onPress={()=>props.navigation.navigate('Senha')} underlayColor='#EEE'>
                     <HeaderTitle>Pedidos</HeaderTitle>
                 </HeaderArea>
-                <HeaderArea onPress={()=>props.setSignOut()} underlayColor='#EEE'> 
+                <HeaderArea onPress={()=>SingOut()} underlayColor='#EEE'> 
                     <HeaderTitle name='Sair' >Sair</HeaderTitle>
                 </HeaderArea>
                 <AreaLogo>
@@ -128,6 +125,7 @@ const mapDispatchToProps = (dispatch) =>{
         setInfoUsuario:(infoUsuario)=>dispatch({type:'SET_INFOUSUARIO', payload:{infoUsuario}}),
         setClearJwt:(jwt)=>dispatch({type:'SET_JWT', payload:{jwt}}),
         setEndereco:(Endereco)=>dispatch({type:'SET_ENDERECO', payload:{Endereco}}),
+        setEnderecoAtivo:(EnderecoAtivo)=>dispatch({type:'SET_ENDERECOATIVO', payload:{EnderecoAtivo}}),
         setSignOut:()=>dispatch(SignOut()),
     }
 }

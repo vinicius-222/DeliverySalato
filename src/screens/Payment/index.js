@@ -28,6 +28,7 @@ const Pagamento = (props) =>{
     const ListFormaDePagamentoRef = useRef();
     const [ListFormaDePagamento, setListFormaDePagamento] = useState([]);
     const [active, setActive] = useState('1');
+    const [VlEntrega, setVlEntrega] = useState(0);
     const [troco, setTroco] = useState('');
    
     const getFormadePagamento = () =>{
@@ -67,7 +68,7 @@ const Pagamento = (props) =>{
 
     const CalculaTroco = () => {
         let t = parseFloat(troco);
-        let v = parseFloat(props.VlTotalProduto + 5).toFixed(2);
+        let v = parseFloat(props.VlTotalProduto + parseFloat(VlEntrega)).toFixed(2);
         if (troco == ''){
             t = 0
         }
@@ -81,6 +82,10 @@ const Pagamento = (props) =>{
     }
     useEffect(()=>{
         getFormadePagamento();
+        let arr = props.MeusEnderecos;
+        let i = arr.findIndex((e)=> e.StEntrega == 1);
+        setVlEntrega(arr[i].Valor);
+
     },[])
     return(
         <Safe>
@@ -106,7 +111,7 @@ const Pagamento = (props) =>{
                 <BodyFormaDePagamentoArea>
                     <BodyFormaDePagamentoSubTotalArea>
                         <BodyFormaDePagamentoSubTotalText>Taxa de Entrega</BodyFormaDePagamentoSubTotalText>
-                        <BodyFormaDePagamentoSubTotal>R$ {parseFloat(5).toFixed(2)}</BodyFormaDePagamentoSubTotal>
+                        <BodyFormaDePagamentoSubTotal>R$ {parseFloat(VlEntrega).toFixed(2)}</BodyFormaDePagamentoSubTotal>
                     </BodyFormaDePagamentoSubTotalArea>
                     <BodyFormaDePagamentoSubTotalArea>
                         <BodyFormaDePagamentoSubTotalText>Total dos Produtos</BodyFormaDePagamentoSubTotalText>
@@ -114,7 +119,7 @@ const Pagamento = (props) =>{
                     </BodyFormaDePagamentoSubTotalArea>
                     <BodyFormaDePagamentoSubTotalArea>
                         <BodyFormaDePagamentoSubTotalText>Total </BodyFormaDePagamentoSubTotalText>
-                        <BodyFormaDePagamentoSubTotal>R$ {parseFloat(props.VlTotalProduto + 5).toFixed(2)}</BodyFormaDePagamentoSubTotal>
+                        <BodyFormaDePagamentoSubTotal>R$ {parseFloat(parseFloat(props.VlTotalProduto) + parseFloat(VlEntrega)).toFixed(2)}</BodyFormaDePagamentoSubTotal>
                     </BodyFormaDePagamentoSubTotalArea>
                     {active == 1 &&
                     <>
@@ -154,7 +159,9 @@ const mapStateToProps = (state) => {
         hash:state.userReducer.hash,
         Endereco:state.carReducer.Endereco,
         VlTotalProduto:state.carReducer.VlTotalProduto,
-        ListFormaDePagamento:state.carReducer.ListFormaDePagamento
+        ListFormaDePagamento:state.carReducer.ListFormaDePagamento,
+        MeusEnderecos:state.enderecoReducer.MeusEnderecos,
+
     }
 }
  

@@ -203,6 +203,11 @@ const UpdateAddressModal = (props) => {
     const [NmDestinatario, setNmDestinatario] = useState(props.data.NmDestinatario);
     const [DsPontoDeReferencia, setDsPontoDeReferencia] = useState(props.data.DsPontoDeReferencia);
     const [NmEndereco, setNmEndereco] = useState(props.data.NmEndereco);
+    const [DsLatitude, setDsLatitude] = useState(props.data.Latitude);
+    const [DsLongitude, setDsLongitude] = useState(props.data.Longitude);
+    const [NrDistancia, setNrDistancia] = useState(props.data.Distancia);
+    const [NrTempo, setNrTempo] = useState(props.data.Tempo);
+    const [VlValor, setVlValor] = useState(props.data.Valor);
     const [CdUF, setCdUF] = useState(props.data.CdUF);
     const [geometry, setGeometry] = useState({});
     const [carregaLatLng, setcarregaLatLng] = useState(false);
@@ -268,24 +273,33 @@ const UpdateAddressModal = (props) => {
                 alert('Alguns campos nao podem ficar vazio, verifique (*)!!')
                 return;
             }else{
-                props.ActionUpdate(props.data.IdEndereco, DsLogradouro, DsBairro, DsCidade, NrNumero, DsCEP, CdUF, props.data.StEntrega, TpEndereco, NmEndereco, DsPontoDeReferencia, NmDestinatario, props.k);
+                props.ActionUpdate(props.data.IdEndereco, DsLogradouro, DsBairro, DsCidade, NrNumero, DsCEP, CdUF, props.data.StEntrega, 
+                                   TpEndereco, NmEndereco, DsPontoDeReferencia, NmDestinatario, props.k, DsLatitude, DsLongitude, NrDistancia, NrTempo, VlValor);
                 props.visibleAction(false);
             }
         })
     }
 
     useEffect(()=>{
-
         const getEndereco = async() =>{
             if (DsLogradouro !== ''){
                 const end = await api.getPositionEndereco(`${DsLogradouro} ${NrNumero}, ${DsBairro} - ${DsCidade} ${CdUF} ${DsCEP}`);
                 setcarregaLatLng(true);
-                setGeometry(end);
-                console.log(end)
+                setGeometry(end.geometry.location);
             }
         }
-
-        getEndereco();
+        if (!carregaLatLng){
+            if (DsLatitude !== null){
+                setcarregaLatLng(true);
+                setGeometry(
+                    {"lat":parseFloat(DsLatitude), 
+                    "lng":parseFloat(DsLongitude)});
+            }else{
+                getEndereco();
+            }
+        }else{
+            getEndereco();
+        }
        
     },[DsLogradouro, DsBairro, DsCidade, DsCEP, CdUF, NrNumero ])
 
@@ -302,7 +316,6 @@ const UpdateAddressModal = (props) => {
             transparent={true}
             visible={props.visible}
         >
-            
             <Safe>
                 <ScrollContainer>
                     <KeyBordoSafeArea>
@@ -404,12 +417,21 @@ const UpdateAddressModal = (props) => {
                                 <ModalTitle>Ponto de Referencia (*)</ModalTitle>
                                 <TxtLogradouro value={DsPontoDeReferencia} onChangeText={(i)=>setDsPontoDeReferencia(i)}/>
                             </ModalDsPontoDeReferenciaArea>
-                            <MapAddress geometry={geometry} carregaInfo={carregaLatLng} />
+                            <MapAddress 
+                                geometry={geometry} 
+                                carregaInfo={carregaLatLng} 
+                                setLatitude={(e)=>setDsLatitude(e)}
+                                setLongitude={(e)=>setDsLongitude(e)}
+                                setDistancia={(e)=>setNrDistancia(e)}
+                                setTempo={(e)=>setNrTempo(e)}
+                                setValor={(e)=>setVlValor(e)}
+                            />
                             <ButtonActionArea>
                                 <ButtonActionSalvar onPress={()=>HandleSalvar()}>
                                     <ButtonText>Salvar</ButtonText>
                                 </ButtonActionSalvar>
                             </ButtonActionArea>
+                            
                         </Container>
                     </KeyBordoSafeArea>
                 </ScrollContainer>

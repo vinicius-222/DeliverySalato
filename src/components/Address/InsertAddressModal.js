@@ -205,6 +205,11 @@ const InsertAddressModal = (props) => {
     const [DsCEP, setDsCEP] = useState('');
     const [CdUF, setCdUF] = useState('');
     const [CEPEndereco, setCEPEndereco] = useState('');
+    const [DsLatitude, setDsLatitude] = useState('');
+    const [DsLongitude, setDsLongitude] = useState('');
+    const [NrDistancia, setNrDistancia] = useState(0);
+    const [NrTempo, setNrTempo] = useState(0);
+    const [VlValor, setVlValor] = useState(0);
     const [DsPontoDeReferencia, setDsPontoDeReferencia] = useState();
     const [NmEndereco, setNmEndereco] = useState();
     const [geometry, setGeometry] = useState({});
@@ -270,7 +275,8 @@ const InsertAddressModal = (props) => {
                 alert('Alguns campos nao podem ficar vazio, verifique (*)!!')
                 return;
             }else{
-                props.ActionInsertClick(DsLogradouro, DsBairro, DsCidade, NrNumero, DsCEP, CdUF, TpEndereco, NmEndereco, DsPontoDeReferencia, NmDestinatario);
+                props.ActionInsertClick(DsLogradouro, DsBairro, DsCidade, NrNumero, DsCEP, CdUF, TpEndereco,
+                                        NmEndereco, DsPontoDeReferencia, NmDestinatario, DsLatitude, DsLongitude, NrDistancia, NrTempo, VlValor);
                 props.visibleAction(false);
                 LimpaCampos();
             }
@@ -318,9 +324,10 @@ const InsertAddressModal = (props) => {
             if (DsLogradouro !== ''){
                 const end = await api.getPositionEndereco(`${DsLogradouro} ${NrNumero}, ${DsBairro} - ${DsCidade} ${CdUF} ${DsCEP}`);
                 setcarregaLatLng(true);
-                setGeometry(end);
+                setGeometry(end.geometry.location);
             }
         },1000)
+        
 
     },[DsLogradouro, DsBairro, DsCidade, DsCEP, CdUF, NrNumero ])
     
@@ -487,7 +494,15 @@ const InsertAddressModal = (props) => {
                                 <ModalTitle>Ponto de Referencia (*)</ModalTitle>
                                 <TxtLogradouro value={DsPontoDeReferencia} onChangeText={(i)=>setDsPontoDeReferencia(i)}/>
                             </ModalDsPontoDeReferenciaArea>
-                            <MapAddress geometry={geometry} carregaInfo={carregaLatLng} />
+                            <MapAddress 
+                                geometry={geometry} 
+                                carregaInfo={carregaLatLng} 
+                                setLatitude={(e)=>setDsLatitude(e)}
+                                setLongitude={(e)=>setDsLongitude(e)}
+                                setDistancia={(e)=>setNrDistancia(e)}
+                                setTempo={(e)=>setNrTempo(e)}
+                                setValor={(e)=>setVlValor(e)}
+                            />
                             <ButtonActionArea>
                                 <ButtonActionSalvar onPress={()=>HandleSalvar()}>
                                     <ButtonText>Salvar</ButtonText>

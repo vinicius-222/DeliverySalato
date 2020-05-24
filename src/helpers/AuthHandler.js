@@ -22,7 +22,6 @@ export const SignOut = () => {
 					hash:''
 				} 
         });
-        console.log('passou aqui')
 	}
 }
 

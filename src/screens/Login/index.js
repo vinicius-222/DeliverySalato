@@ -37,7 +37,7 @@ const Page = (props) => {
         alert(res.error);
       } else {
         props.setJwt(res.jwt);
-        props.setName(res.NmVendedor);
+        props.setName(res.name);
         props.setHash(res.hash);
         props.navigation.dispatch(StackActions.reset({
             index:0,
@@ -59,11 +59,12 @@ const Page = (props) => {
         alert(res.error);
       } else {
         props.setJwt(res.jwt);
-        props.setName(res.name);
+        props.setName(name);
+        props.setHash(res.hash);
         props.navigation.dispatch(StackActions.reset({
             index:0,
             actions:[
-                NavigationActions.navigate({routeName:'HomeDrawer'})
+                NavigationActions.navigate({routeName:'PrincipalTabs'})
             ]
         }));
       }

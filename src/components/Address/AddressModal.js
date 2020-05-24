@@ -1,11 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Modal, Platform } from 'react-native';
-import Geocoder from 'react-native-geocoding';
-import Geolocation from '@react-native-community/geolocation';
 import styled from 'styled-components/native';
 import EditModal from '../../components/Address/EditModal';
 import InsertAddressModal from './InsertAddressModal';
-import { MapsAPI } from '../../config';
 import { connect } from 'react-redux';
 import useSalatoDeliveryAPI from '../../useSalatoDeliveryAPI';
 
@@ -160,17 +157,16 @@ const ButtonActionModalCircleArea = styled.View`
 let timer;
 
 const AddressModal = (props) => {
-    const map = useRef();
     const api = useSalatoDeliveryAPI(props);
     const [LocationActual, setLocationActual] = useState('');
     const [MeusEndereco, setMeusEndereco] = useState([]);
     const [IdEndereco, setIdEndereco] = useState([]);
     const [keyEndereco, setKeyEndereco] = useState(0);
-    const [modalEditTitle, setModalEditTitle] = useState('Edite seu endereco');
     const [modalEditVisible, setModalEditVisible] = useState(false);
     const [modalInserVisible, setModalInsertVisible] = useState(false);
     const [stUsarGeoLocation, setStUsarGeoLocation] = useState(false);
 
+    //Aqui carrega no carrinho o endereco ativo ou a localizacao atual do dispositivo caso nao tenha nenhum endereco ativo
     useEffect(async()=>{
         setMeusEndereco(props.MeusEnderecos);
         if(props.EnderecoAtivo.length > 0){
@@ -182,6 +178,7 @@ const AddressModal = (props) => {
     
     }, []);
 
+    //aqui carrega o area de entrega e a posicao atual do mapa
     useEffect(()=> {
         const getArea = async() => {
             const area = await api.getAreaEntrega();
@@ -203,6 +200,7 @@ const AddressModal = (props) => {
     }
 
     const handleClose = () => {
+
     }
 
     const handleResultClick = async(item) => {
@@ -243,7 +241,7 @@ const AddressModal = (props) => {
         }
     }
 
-    const UpdateEndereco = async(IdEndereco, DsLogradouro, DsBairro, DsCidade, NrNumero, DsCEP, CdUF, StEntrega, TpEndereco, NmEndereco, DsPontoDeReferencia, NmDestinatario, k) => {
+    const UpdateEndereco = async(IdEndereco, DsLogradouro, DsBairro, DsCidade, NrNumero, DsCEP, CdUF, StEntrega, TpEndereco, NmEndereco, DsPontoDeReferencia, NmDestinatario, k,DsLatitude, DsLongitude, NrDistancia, NrTempo, VlValor) => {
         let arr = [];
         arr = MeusEndereco;
         arr[k].DsLogradouro = DsLogradouro;
@@ -256,23 +254,29 @@ const AddressModal = (props) => {
         arr[k].NmEndereco = NmEndereco;
         arr[k].DsPontoDeReferencia = DsPontoDeReferencia;
         arr[k].NmDestinatario = NmDestinatario;
+        arr[k].Latitude = DsLatitude;
+        arr[k].Longitude = DsLongitude;
+        arr[k].Distancia = NrDistancia;
+        arr[k].Tempo = NrTempo;
+        arr[k].Valor = VlValor;
         setMeusEndereco(arr);
-        const json = await api.updateEndereco(props.jwt, IdEndereco, DsLogradouro, DsBairro, DsCidade, NrNumero, DsCEP, CdUF, StEntrega, TpEndereco, NmEndereco, DsPontoDeReferencia, NmDestinatario );
+        const json = await api.updateEndereco(props.jwt, IdEndereco, DsLogradouro, DsBairro, DsCidade, NrNumero, DsCEP, CdUF, StEntrega, TpEndereco, NmEndereco, DsPontoDeReferencia, NmDestinatario, DsLatitude, DsLongitude, NrDistancia, NrTempo, VlValor);
+        
         if (!json.error){
-            alert("registor atulizado!!");
+            alert("registro atulizado!!");
         }
-
     }
     
-    const InsertEndereco = async(DsLogradouro, DsBairro, DsCidade, NrNumero, DsCEP, CdUF, TpEndereco, NmEndereco, DsPontoDeReferencia, NmDestinatario) =>{
-        const json = await api.insertEndereco(props.jwt, DsLogradouro, DsBairro, DsCidade, NrNumero, DsCEP, CdUF, TpEndereco, NmEndereco, DsPontoDeReferencia, NmDestinatario);
+    const InsertEndereco = async(DsLogradouro, DsBairro, DsCidade, NrNumero, DsCEP, CdUF, TpEndereco, NmEndereco, DsPontoDeReferencia, NmDestinatario, DsLatitude, DsLongitude, NrDistancia, NrTempo, VlValor) =>{
+        const json = await api.insertEndereco(props.jwt, DsLogradouro, DsBairro, DsCidade, NrNumero, DsCEP, CdUF, TpEndereco, NmEndereco, DsPontoDeReferencia, NmDestinatario, DsLatitude, DsLongitude, NrDistancia, NrTempo, VlValor);
+        
         if (!json.error){
             const json = await api.getEndereco(props.jwt);
             setMeusEndereco(json.InfoEndereco);
             props.setMeusEnderecos(json.InfoEndereco);
-
         }
     }
+
     return (
         <Modal
             animationType="slide"

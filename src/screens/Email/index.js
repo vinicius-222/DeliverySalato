@@ -25,7 +25,7 @@ const Email = (props) =>{
                 <Container>
                     <Body>
                         <TextInf style={{color:'#FF0000'}}>Email Atual:</TextInf>   
-                        <Input value={props.infoUsuario.InfoUsuario[0].DsLogin} keyboardType='email-address' onChangeText={()=>{}}/>
+                        <Input value={props.infoUsuario[0].DsLogin} keyboardType='email-address' onChangeText={()=>{}}/>
                         <TextInf style={{color:'#008000', marginTop:5}}>Novo email:</TextInf>   
                         <Input value={email} keyboardType='email-address' onChangeText={(i)=>setEmail(i)}/>
                         <TextInf style={{color:'#008000'}}>Confirmar Novo email:</TextInf>   

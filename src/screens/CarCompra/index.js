@@ -4,8 +4,6 @@ import Loading from '../../components/Loading';
 import BalonCaution from '../../components/BalonCaution';
 import DatePicker from 'react-native-datepicker';
 import AddressModal from '../../components/Address/AddressModal';
-import dateFnsFormat from 'date-fns/format';
-import dateFnsParse from 'date-fns/parse';
 import { parseISO, format, formatRelative, formatDistance , parse} from 'date-fns';
 import localeBR from 'date-fns/locale/en-CA';
   
@@ -386,28 +384,3 @@ const mapDispatchToProps = (dispatch) =>{
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(CarCompra);
-
-/*<HeaderEnderecoAreaItemPreenchido>
-                            <HeaderEnderecoArea>
-                                <HeaderEnderecoTextEditArea>
-                                    <HeaderEnderecoText>{props.Endereco}</HeaderEnderecoText>
-                                </HeaderEnderecoTextEditArea>
-                                <HeaderEnderecoActionEditArea onPress={()=>{
-                                    props.setEndereco('')
-                                    setCEPEndereco('');    
-                                }} underlayColor="#EEE">
-                                    <HeaderEnderecoTextEdit>alterar</HeaderEnderecoTextEdit>
-                                </HeaderEnderecoActionEditArea>
-                            </HeaderEnderecoArea>
-                        </HeaderEnderecoAreaItemPreenchido>
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-
-
-
-                        */

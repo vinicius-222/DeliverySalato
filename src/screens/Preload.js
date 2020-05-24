@@ -70,11 +70,10 @@ const Preload = (props) => {
     }
 
     useEffect(()=>{
-        location();
-        getMeusEnderecos();
         setTimeout(() => {
             VerificaLogin();
         }, 1000);
+        
     })
 
     return(
@@ -93,7 +92,7 @@ const Preload = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        jwt:state.userReducer.jwt
+        jwt:state.userReducer.jwt 
     };
 }
 

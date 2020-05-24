@@ -73,7 +73,12 @@ const MapAddress = (props) => {
     const api = useSalatoDeliveryAPI();
     const map = useRef();
     const [polygon, setPoygon]  = useState(props.PolygonCordenates);
-    const [toLoc, setToLoc] = useState({});
+    const [toLoc, setToLoc] = useState({
+        center:{
+            latitude:0,
+            longitude:0
+        }
+    });
     const [fromLoc, setFromLoc] = useState({});
     const [mapLoc, setMapLoc] = useState(props.MapCameraLocation);
     const [showDirections, setShowDirections] = useState(false);
@@ -112,6 +117,10 @@ const MapAddress = (props) => {
         const priceReq = await api.getRequestPrice( r.distance );
         if(!priceReq.error) {
             setRequestPrice( priceReq.valor );
+            setTimeout(()=>{
+                AtualizaValores();
+            },1000)
+            
          }
 
         map.current.fitToCoordinates(r.coordinates, {
@@ -135,6 +144,17 @@ const MapAddress = (props) => {
         });
     }
     
+    const AtualizaValores = () => {
+        props.setLatitude(toLoc.center.latitude);
+        props.setLongitude(toLoc.center.longitude);
+        props.setDistancia(RequestDistance);
+        props.setTempo(RequestTime);   
+    }
+
+    useEffect(()=>{
+        props.setValor(RequestPrice);
+    },[RequestPrice])
+
     useEffect(() => {
         setToLoc({})
         if (props.carregaInfo){
@@ -157,6 +177,7 @@ const MapAddress = (props) => {
         if(fromLoc.center && toLoc.center) {
             setShowDirections(true);
         }
+        
     }, [toLoc]);
 
     useEffect(()=> {
@@ -213,9 +234,9 @@ const MapAddress = (props) => {
                         zoom:14,
                         pitch:0,
                         altitude:0,
-                        heading:0
+                        heading:0   
                     })
-                    console.log(e.nativeEvent.coordinate);
+                    AtualizaValores();
                 }}
             >
                 <Polygon

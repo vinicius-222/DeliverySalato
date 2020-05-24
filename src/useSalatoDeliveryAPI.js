@@ -5,7 +5,7 @@ import Geocoder from 'react-native-geocoding';
 import Geolocation from '@react-native-community/geolocation';
 import { MapsAPI } from './config';
 
-//const URL = 'http://192.168.1.65';
+// const URL = 'http://192.168.1.65';
 const URL = 'http://138.99.15.234:20003';
 const BASEAPI = URL+'/backEndSalato/';
 export const BASEAPIIMAGE = URL+'/images/';
@@ -219,9 +219,7 @@ const apiFetchPut = async (endpoint, body = [], props) => {
         },
         body:JSON.stringify(body)
     });
-    
     const json = await res.json();
-    
     if (json.error){
         props.navigation.dispatch(StackActions.reset({
             index:0,
@@ -245,23 +243,12 @@ const useSalatoDeliveryAPI = (props) => ({
        return json;
     },
 
-    signup:(name, email, password) => {
-        return new Promise((resolve, reject)=>{
-            setTimeout(()=>{
-                let json = {
-                    error:''
-                };
-
-                if(email == 'erro@hotmail.com') {
-                    json.error = 'E-mail já existe!';
-                } else {
-                    json.token = '123';
-                    json.name = 'Paulo da Silva';
-                }
-
-                resolve(json);
-            }, 1000);
-        });
+    signup:async(NmPessoa, DsLogin, pass) => {
+       const json = await apiFetchPost(
+           '/user/new_recordClient',
+           {NmPessoa, DsLogin, pass}
+       )
+       return json;
     },
 
     getRequestPrice:(distance) => {
@@ -412,20 +399,27 @@ const useSalatoDeliveryAPI = (props) => ({
         return json;
     },
 
-    insertEndereco:async (jwt, DsLogradouro, DsBairro, DsCidade, NrNumero, DsCEP, CdUF, TpEndereco = '', NmEndereco = '', DsPontoDeReferencia = '', NmDestinatario = '') => {
+    insertEndereco:async (jwt, DsLogradouro, DsBairro, DsCidade, NrNumero, DsCEP, CdUF, TpEndereco = '', 
+                          NmEndereco = '', DsPontoDeReferencia = '', NmDestinatario = '',Latitude, Longitude, Distancia, Tempo, Valor) => {
         const json = await apiFetchPost(
             '/user/insertEndereco',
-            {jwt, DsLogradouro, DsBairro, DsCidade, NrNumero, DsCEP, CdUF, TpEndereco, NmEndereco, DsPontoDeReferencia, NmDestinatario}
+            {jwt, DsLogradouro, DsBairro, DsCidade, NrNumero, DsCEP, CdUF, TpEndereco, 
+            NmEndereco, DsPontoDeReferencia, NmDestinatario, Latitude, Longitude, Distancia, Tempo, Valor},
+            props
         )
         return json;
     },
 
-    updateEndereco:async (jwt, IdEndereco, DsLogradouro, DsBairro, DsCidade, NrNumero, DsCEP, CdUF, StEntrega, TpEndereco = '', NmEndereco = '', DsPontoDeReferencia = '', NmDestinatario = '') => {
-        const json = await apiFetchPost(
+    updateEndereco:async (jwt, IdEndereco, DsLogradouro, DsBairro, DsCidade, NrNumero, DsCEP, CdUF, StEntrega, 
+                          TpEndereco = '', NmEndereco = '', DsPontoDeReferencia = '', NmDestinatario = '',
+                          Latitude, Longitude, Distancia, Tempo, Valor) => {
+        const json = await apiFetchPut(
             '/user/updateEndereco',
-            {jwt, IdEndereco, DsLogradouro, DsBairro, DsCidade, NrNumero, DsCEP, CdUF, StEntrega, TpEndereco, NmEndereco, DsPontoDeReferencia, NmDestinatario},
+            {jwt, IdEndereco, DsLogradouro, DsBairro, DsCidade, NrNumero, DsCEP, CdUF, StEntrega, 
+            TpEndereco, NmEndereco, DsPontoDeReferencia, NmDestinatario, Latitude, Longitude, Distancia, Tempo, Valor},
             props
         )
+        
         return json;
     },
 
@@ -494,7 +488,7 @@ const useSalatoDeliveryAPI = (props) => ({
 
     getPositionEndereco:async(CdCEP)=>{
         const json = await Geocoder.from(CdCEP);
-        return json.results[0].geometry.location
+        return json.results[0]
     },
 
     getAreaEntrega:async()=>{
@@ -550,11 +544,18 @@ const useSalatoDeliveryAPI = (props) => ({
     getRequestPrice:async(Distnce) => {
         return new Promise((resolve, reject) => {
             setTimeout(()=>{
+                let VlDistanciaPadrao = 2.370;
                 let Price = {
                     error:''
                 };
-                let p = 6 * Distnce;
-                Price.valor = p;
+                let p; 
+                if (Distnce <= VlDistanciaPadrao){
+                    Price.valor = 5.00;
+                }else{
+                    let r = Distnce - VlDistanciaPadrao;
+                    p = 3 * r;
+                    Price.valor = p + 5.00;
+                }
                 resolve(Price);
             },1000 )
         })
@@ -599,6 +600,25 @@ const useSalatoDeliveryAPI = (props) => ({
         )
         return json;
     },
+
+    getClienteDelivery:async (jwt,hash) =>{
+        const json = await apiFetchGet(
+            '/cliente/ClienteDelivery',
+            {jwt,hash},
+            props
+        )
+        return json;
+    },
+    
+    updateClienteDelivery:async (jwt, hash , CdChamada, NmPessoa, CdCPF_CNPJ, DsTeleFoneCobranca, DsFaxCobranca, DtNascimento, TpEstadoCivil, NrIdentidade, TpSexo )=>{
+        const json = await apiFetchPut(
+            '/cliente/ClienteDelivery',
+            {jwt, hash, CdChamada, NmPessoa, CdCPF_CNPJ, DsTeleFoneCobranca, DsFaxCobranca, DtNascimento, TpEstadoCivil, NrIdentidade, TpSexo},
+        
+        )
+
+        return json;
+    }
     
 });
 

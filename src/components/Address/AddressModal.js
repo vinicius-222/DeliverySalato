@@ -155,11 +155,9 @@ const ButtonActionModalCircleArea = styled.View`
 `;
 
 let timer;
-
 const AddressModal = (props) => {
     const api = useSalatoDeliveryAPI(props);
     const [LocationActual, setLocationActual] = useState('');
-    const [MeusEndereco, setMeusEndereco] = useState([]);
     const [IdEndereco, setIdEndereco] = useState([]);
     const [keyEndereco, setKeyEndereco] = useState(0);
     const [modalEditVisible, setModalEditVisible] = useState(false);
@@ -167,16 +165,18 @@ const AddressModal = (props) => {
     const [stUsarGeoLocation, setStUsarGeoLocation] = useState(false);
 
     //Aqui carrega no carrinho o endereco ativo ou a localizacao atual do dispositivo caso nao tenha nenhum endereco ativo
-    useEffect(async()=>{
-        setMeusEndereco(props.MeusEnderecos);
-        if(props.EnderecoAtivo.length > 0){
-            props.clickAction(false, props.EnderecoAtivo);
-        }else{
-            let item = `${ props.GeoEndereco[0]} N:${ props.GeoEndereco[1]}, ${ props.GeoEndereco[2]} - ${ props.GeoEndereco[3]} / ${ props.GeoEndereco[4]}, CEP:${ props.GeoEndereco[5]}`
-            props.clickAction(true, item);
+    useEffect(()=>{
+        const handleEnderecos = () =>{
+            if(props.EnderecoAtivo.length > 0){
+                props.clickAction(false, props.EnderecoAtivo);
+            }else{
+                let item = `${ props.GeoEndereco[0]} N:${ props.GeoEndereco[1]}, ${ props.GeoEndereco[2]} - ${ props.GeoEndereco[3]} / ${ props.GeoEndereco[4]}, CEP:${ props.GeoEndereco[5]}`
+                props.clickAction(true, item);
+            }
         }
     
-    }, []);
+        handleEnderecos();
+    },[]);
 
     //aqui carrega o area de entrega e a posicao atual do mapa
     useEffect(()=> {
@@ -207,7 +207,7 @@ const AddressModal = (props) => {
         const json = await api.updateStEndereco(props.jwt, item.IdEndereco, item.StEntrega);
         if (!json.error){
             let arr = [];
-            arr = MeusEndereco;
+            arr = props.MeusEnderecos;
 
             for (let i in arr){
                 if (arr[i].IdEndereco == item.IdEndereco){
@@ -230,20 +230,20 @@ const AddressModal = (props) => {
 
     const DeleteEndereco = (k) =>{
         let arr = [];
-        arr = MeusEndereco;
+        arr = props.MeusEnderecos;
         arr.splice(k, 1);
-        setMeusEndereco(arr);
+        props.setMeusEnderecos(arr);
         
         if (props.MeusEnderecos.length <= 0){
             let item = `${ props.GeoEndereco[0]} N:${ props.GeoEndereco[1]}, ${ props.GeoEndereco[2]} - ${ props.GeoEndereco[3]} / ${ props.GeoEndereco[4]}, CEP:${ props.GeoEndereco[5]}`
             props.setEndereco(item);
-            props.visibleBalon(true)
+            props.setVisibleBalon(true)
         }
     }
 
     const UpdateEndereco = async(IdEndereco, DsLogradouro, DsBairro, DsCidade, NrNumero, DsCEP, CdUF, StEntrega, TpEndereco, NmEndereco, DsPontoDeReferencia, NmDestinatario, k,DsLatitude, DsLongitude, NrDistancia, NrTempo, VlValor) => {
         let arr = [];
-        arr = MeusEndereco;
+        arr = props.MeusEnderecos;
         arr[k].DsLogradouro = DsLogradouro;
         arr[k].NrNumero = NrNumero;
         arr[k].DsBairro = DsBairro;
@@ -259,7 +259,7 @@ const AddressModal = (props) => {
         arr[k].Distancia = NrDistancia;
         arr[k].Tempo = NrTempo;
         arr[k].Valor = VlValor;
-        setMeusEndereco(arr);
+        props.setMeusEnderecos(arr);
         const json = await api.updateEndereco(props.jwt, IdEndereco, DsLogradouro, DsBairro, DsCidade, NrNumero, DsCEP, CdUF, StEntrega, TpEndereco, NmEndereco, DsPontoDeReferencia, NmDestinatario, DsLatitude, DsLongitude, NrDistancia, NrTempo, VlValor);
         
         if (!json.error){
@@ -272,7 +272,6 @@ const AddressModal = (props) => {
         
         if (!json.error){
             const json = await api.getEndereco(props.jwt);
-            setMeusEndereco(json.InfoEndereco);
             props.setMeusEnderecos(json.InfoEndereco);
         }
     }
@@ -328,7 +327,7 @@ const AddressModal = (props) => {
                         </ModalLocalizacaoAtual>
                     </ModalHeader>
                     <ModalResults>
-                        {MeusEndereco.map((i,k)=>(
+                        {props.MeusEnderecos.map((i,k)=>(
                             <ModalResultArea active={i.StEntrega == '1'}>
                                 <ModalResult key={k} onPress={()=>handleResultClick(i)} underlayColor="transparent" >
                                     <ModalResultItem>
@@ -350,6 +349,7 @@ const AddressModal = (props) => {
                                                     setIdEndereco(i)
                                                     setKeyEndereco(k)
                                                     setModalEditVisible(true)}
+                                                   
                                                 } underlayColor="transparent">
                                                     <ButtonActionModalCircleArea>
                                                         <ButtonActionModalCircle></ButtonActionModalCircle>
@@ -390,6 +390,7 @@ const mapDispatchToProps = (dispatch) => {
         setEnderecoAtivo:(EnderecoAtivo)=>dispatch({type:'SET_ENDERECOATIVO', payload:{EnderecoAtivo}}),
         setPolygonCordenates:(PolygonCordenates)=>dispatch({type:'SET_POLYGONCORDENATES', payload:{PolygonCordenates}}),
         setMapCameraLocation:(MapCameraLocation)=>dispatch({type:'SET_MAPCAMERALOCATION', payload:{MapCameraLocation}}),
+        setVisibleBalon:(visibleBalon)=>dispatch({type:'SET_VISIBLEBALON', payload:{visibleBalon}})
     }
 }
 

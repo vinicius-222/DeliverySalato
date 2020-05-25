@@ -5,6 +5,7 @@ import { SignOut } from '../../helpers/AuthHandler';
 import { StackActions, NavigationActions } from 'react-navigation';
 import useSalatoDeliveryAPI from '../../useSalatoDeliveryAPI';
 import HeaderPerfil from '../../components/HeaderPerfil';
+import AddressModal from '../../components/Address/AddressModal';
 import {
     Safe,
     Container,
@@ -35,13 +36,23 @@ const Perfil = (props) =>{
                                                     {nome:'União Estavel', id:5},
                                                     {nome:'Outros', id:6}
                                                     ]);
+    const [modalTitle, setModalTitle] = useState('digite seu endereco');
+    const [modalVisible, setModalVisible] = useState(false);
+    const [visibleBalon, setVisibleBalon] = useState(false);
   
 
     const SingOut = () => {
         props.setEndereco('')
         props.setEnderecoAtivo([])
-        props.setSignOut()
+        props.setSignOut();
     }
+
+    const handleModalClick = (field, item) => {
+        props.setVisibleBalon(field);
+        props.setEndereco(item);
+        setModalVisible(false)
+    }
+
     useEffect(()=> {
         if (!props.jwt){
             props.navigation.dispatch(StackActions.reset({
@@ -79,6 +90,13 @@ const Perfil = (props) =>{
     return(
         <Safe>
             <Container>
+                <AddressModal  
+                    title={modalTitle}
+                    visible={modalVisible}
+                    visibleAction={setModalVisible}
+                    clickAction={handleModalClick}
+                    visibleBalon={setVisibleBalon}
+                />
                 <HeaderArea onPress={()=>props.navigation.navigate('Conta')} underlayColor='#EEE'> 
                     <HeaderTitle>Perfil</HeaderTitle>
                 </HeaderArea>
@@ -90,6 +108,9 @@ const Perfil = (props) =>{
                 </HeaderArea>
                 <HeaderArea onPress={()=>props.navigation.navigate('Senha')} underlayColor='#EEE'>
                     <HeaderTitle>Pedidos</HeaderTitle>
+                </HeaderArea>
+                <HeaderArea onPress={()=>setModalVisible(true)} underlayColor='#EEE'>
+                    <HeaderTitle>Enderecos</HeaderTitle>
                 </HeaderArea>
                 <HeaderArea onPress={()=>SingOut()} underlayColor='#EEE'> 
                     <HeaderTitle name='Sair' >Sair</HeaderTitle>
@@ -116,7 +137,7 @@ const mapStateToProps = (state) => {
         hash:state.userReducer.hash,
         Endereco:state.carReducer.Endereco,
         infoUsuario:state.userReducer.infoUsuario,
-
+        visibleBalon:state.enderecoReducer.visibleBalon
     }
 } 
  
@@ -126,6 +147,7 @@ const mapDispatchToProps = (dispatch) =>{
         setClearJwt:(jwt)=>dispatch({type:'SET_JWT', payload:{jwt}}),
         setEndereco:(Endereco)=>dispatch({type:'SET_ENDERECO', payload:{Endereco}}),
         setEnderecoAtivo:(EnderecoAtivo)=>dispatch({type:'SET_ENDERECOATIVO', payload:{EnderecoAtivo}}),
+        setVisibleBalon:(visibleBalon)=>dispatch({type:'SET_VISIBLEBALON', payload:{visibleBalon}}),
         setSignOut:()=>dispatch(SignOut()),
     }
 }

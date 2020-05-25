@@ -16,12 +16,7 @@ export const SignOut = () => {
 				}
         });
         
-        dispatch({
-			type:'SET_HASH',
-				payload:{
-					hash:''
-				} 
-        });
+        dispatch({type:'SET_HASH',payload:{hash:''}});
 	}
 }
 

@@ -5,18 +5,18 @@ export const Safe = styled.SafeAreaView`
 `;
 export const Container = styled.View`
     flex:1;
-    padding:10px;
+    padding:5px 5px;
 `;
 export const HeaderArea = styled.TouchableHighlight`
-    height:50px;
-    border-bottom-color:#CCC;
+    height:45px;
+    border-bottom-color:#FF0000;
     border-bottom-width:0.6px;
     justify-content:center;
     margin:0px 10px;
 `;
 export const HeaderTitle = styled.Text`
-    font-size:18px;
-    color:${props=>props.name == 'Sair' ? '#3574CB': '#FF0000'};
+    font-size:17px;
+    color:${props=>props.name == 'Sair' ? '#3574CB': '#999'};
     margin-left:5px;
 `;
 export const Imagem = styled.Image`
@@ -25,8 +25,11 @@ export const Imagem = styled.Image`
 `;
 
 export const AreaLogo = styled.View`
+    margin-top:10px;
     flex:1;
     justify-content:center;
+    background-color:#FF0000;
+    border-radius:10px;
     align-items:center;
 `;
 

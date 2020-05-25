@@ -69,7 +69,6 @@ const CarCompra = (props) =>{
     const [stLoading, setStLoading] = useState(true);
     const [activeAgendamento, setactiveAgendamento] = useState(false);
     const [activeButton, setactiveButton] = useState('Entrega');
-    const [visibleBalon, setVisibleBalon] = useState(false);
 
     const [modalTitle, setModalTitle] = useState('digite seu endereco');
     const [modalVisible, setModalVisible] = useState(false);
@@ -77,7 +76,7 @@ const CarCompra = (props) =>{
     const [NewDate, setNewDate] = useState(new Date());
 
     const handleModalClick = (field, item) => {
-        setVisibleBalon(field);
+        props.setVisibleBalon(field);
         props.setEndereco(item);
         setModalVisible(false)
     }
@@ -244,14 +243,14 @@ const CarCompra = (props) =>{
                         visible={modalVisible}
                         visibleAction={setModalVisible}
                         clickAction={handleModalClick}
-                        visibleBalon={setVisibleBalon}
+                        visibleBalon={props.visibleBalon}
                     />
                     {props.TpEntrega == 'Entrega' &&  <HeaderEnderecoTpEntregaText>Endereço</HeaderEnderecoTpEntregaText>}
                     {props.TpEntrega == 'Entrega' &&
                         <HeaderEnderecoAreaItem>
                             <HeaderEnderecoArea> 
-                                {visibleBalon &&  
-                                    <BalonCaution active={visibleBalon}/>
+                                {props.visibleBalon &&  
+                                    <BalonCaution active={props.visibleBalon}/>
                                 }
                                 <HeaderEnderecoTextInput>{props.Endereco}</HeaderEnderecoTextInput>
                             </HeaderEnderecoArea>
@@ -334,8 +333,12 @@ const CarCompra = (props) =>{
                     </Container>
                 ))}
                 <BottomActionContinuar onPress={()=>{
-                    props.navigation.navigate('Pagamento')}
-                    }>
+                    if (!props.visibleBalon){
+                        props.navigation.navigate('Pagamento');   
+                    }else{
+                        alert('Voce precisa inserir um endereco antes de pagar!!');
+                    }
+                    }}>
                     <BottomActionText>Pagar agora</BottomActionText>
                 </BottomActionContinuar>
             </ScrolArea>
@@ -363,7 +366,9 @@ const mapStateToProps = (state) => {
         TpEntrega:state.carReducer.TpEntrega,
         VlTotalProduto:state.carReducer.VlTotalProduto,
         NmCategoria:state.carReducer.NmCategoria,
-        IdCategoria:state.carReducer.IdCategoria
+        IdCategoria:state.carReducer.IdCategoria,
+        EnderecoAtivo:state.enderecoReducer.EnderecoAtivo,
+        visibleBalon:state.enderecoReducer.visibleBalon
     }
 }
 const mapDispatchToProps = (dispatch) =>{
@@ -377,7 +382,8 @@ const mapDispatchToProps = (dispatch) =>{
         setEndereco:(Endereco)=>dispatch({type:'SET_ENDERECO', payload:{Endereco}}),
         setTpEntrega:(TpEntrega)=>dispatch({type:'SET_TPENTREGA', payload:{TpEntrega}}),
         setVlTotalProduto:(VlTotalProduto)=>dispatch({type:'SET_VLTOTALPRODUTOS', payload:{VlTotalProduto}}),
-        setListFormaDePagamento:(ListFormaDePagamento)=>dispatch({type:'SET_LISTFORMADEPAGAMENTO', payload:{ListFormaDePagamento}})
+        setListFormaDePagamento:(ListFormaDePagamento)=>dispatch({type:'SET_LISTFORMADEPAGAMENTO', payload:{ListFormaDePagamento}}),
+        setVisibleBalon:(visibleBalon)=>dispatch({type:'SET_VISIBLEBALON', payload:{visibleBalon}})
 
     }
 }

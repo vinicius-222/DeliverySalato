@@ -1,4 +1,5 @@
 import styled from 'styled-components/native';
+import { Platform } from 'react-native';
 
 export const SafeArea = styled.SafeAreaView`
     flex:1;
@@ -26,7 +27,7 @@ export const TitleCampos = styled.Text`
 `;
 export const InputCampos = styled.TextInput`
     font-size:17px;
-    padding:5px;
+    padding:${Platform.OS == 'ios' ? '5px' : '0px 5px'};
 `;
 export const AreaButtons = styled.View`
     flex-direction:row;
@@ -57,6 +58,7 @@ export const ButtonEstadoCivil = styled.TouchableHighlight`
 `;
 export const TitleButton = styled.Text`
     color:#FFF;
+    font-size:14px;
 `;
 
 export const AreaButtonSalvar = styled.View`
@@ -70,7 +72,8 @@ export const ButtonSalvar = styled.TouchableHighlight`
     align-items:center;
     height:50px;
     width:80%;
-    border-radius:10px;
+    border-radius:5px;
     color:#FFF;
-    background-color:#32CD32;
+    backgroundColor:#3574CB;
+    box-shadow:0px 2px 2px #999;
 `;

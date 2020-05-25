@@ -239,14 +239,16 @@ const useSalatoDeliveryAPI = (props) => ({
        const json = await apiFetchPostSignin(
             '/user/getlogin',
             {email, pass},
+            props
        )
        return json;
     },
 
     signup:async(NmPessoa, DsLogin, pass) => {
-       const json = await apiFetchPost(
+       const json = await apiFetchPostSignin(
            '/user/new_recordClient',
-           {NmPessoa, DsLogin, pass}
+           {NmPessoa, DsLogin, pass},
+           props
        )
        return json;
     },

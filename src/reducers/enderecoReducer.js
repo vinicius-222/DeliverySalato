@@ -2,6 +2,7 @@ const initialState = {
     MeusEnderecos:[],
     EnderecoAtivo:[],
     GeoEndereco:[],
+    visibleBalon:false,
     PolygonCordenates:[],
     MapCameraLocation:{}
 }
@@ -23,6 +24,9 @@ export default (state = initialState, action) =>{
             break;
         case 'SET_MAPCAMERALOCATION':
             return {...state, MapCameraLocation:action.payload.MapCameraLocation};
+            break;
+        case 'SET_VISIBLEBALON':
+            return {...state, visibleBalon:action.payload.visibleBalon};
             break;
     }   
 

@@ -61,14 +61,16 @@ export const AreaButton = styled.View`
     alignItems:center;
 `;
 export const ButtonSalvar = styled.TouchableHighlight`
-    backgroundColor:#008000;
+    backgroundColor:#3574CB;
+    box-shadow:0px 2px 2px #999;
     width:350px;
     height:40px;
     margin:10px;
-    borderRadius:10px;
+    borderRadius:5px;
     alignItems:center;
     justifyContent:center;
 `;
 export const TxtSalvar = styled.Text`
     color:#FFFFFF;
+    font-size:18px;
 `;

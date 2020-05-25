@@ -52,15 +52,15 @@ const Page = (props) => {
   const handleSignUp = async () => {
     if(name && email && password) {
       setLoading(true);
-      const res = await api.signup(name, email, password);
+      const json = await api.signup(name, email, password);
       setLoading(false);
-
-      if(res.error) {
-        alert(res.error);
+      
+      if(json.error) {
+        alert(json.error);
       } else {
-        props.setJwt(res.jwt);
-        props.setName(name);
-        props.setHash(res.hash);
+        props.setJwt(json.jwt);
+        props.setName(json.NmPessoa);
+        props.setHash(json.hash);
         props.navigation.dispatch(StackActions.reset({
             index:0,
             actions:[

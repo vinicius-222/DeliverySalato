@@ -27,6 +27,7 @@ export const TitleCampos = styled.Text`
 `;
 export const InputCampos = styled.TextInput`
     font-size:17px;
+    height:${Platform.OS == 'ios' ? 'auto' : '20px'};
     padding:${Platform.OS == 'ios' ? '5px' : '0px 5px'};
 `;
 export const AreaButtons = styled.View`

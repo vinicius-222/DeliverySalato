@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import useSalatoDeliveryAPI, { BASEAPIIMAGE } from '../../useSalatoDeliveryAPI';
 import { 
     Container,
-    Scroll,
     HeaderArea,
     HeaderCategoria,
     HeaderCategoriaItem,
@@ -12,7 +11,7 @@ import {
     HeaderCategoriaDesc,
     HeaderCategoriaAction,
     HeaderCategoriaArea,
-    BodyAreaScroll, 
+    ScrollArea, 
 } from './styled';
 
 const BASE = BASEAPIIMAGE;
@@ -35,21 +34,23 @@ const Category = (props) =>{
     },[])
 
     return(
-            <Container>
+        <Container>
+            <ScrollArea>
                 <HeaderArea>
-                        <HeaderCategoria>
-                            {listCategoria.map((i,k)=>(
-                                <HeaderCategoriaArea key={k} active={activeCategoria == i.DsGrupoProduto} onPress={()=>HandleProdutos(i)} >
-                                    <HeaderCategoriaAction onPress={()=>HandleProdutos(i)} underlayColor="transparent">
-                                        <HeaderCategoriaItem active={activeCategoria == i.DsGrupoProduto}>
-                                                <HeaderCategoriaImage source={{uri:BASE+i.DsImagemSite}} />
-                                                <HeaderCategoriaDesc active={activeCategoria == i.DsGrupoProduto}>{i.DsGrupoProduto}</HeaderCategoriaDesc>
-                                        </HeaderCategoriaItem>
-                                    </HeaderCategoriaAction>
-                                </HeaderCategoriaArea>
-                            ))}
-                        </HeaderCategoria>
+                    <HeaderCategoria>
+                        {listCategoria.map((i,k)=>(
+                            <HeaderCategoriaArea key={k} active={activeCategoria == i.DsGrupoProduto} >
+                                <HeaderCategoriaAction onPress={()=>HandleProdutos(i)} underlayColor="transparent">
+                                    <HeaderCategoriaItem active={activeCategoria == i.DsGrupoProduto}>
+                                            <HeaderCategoriaImage source={{uri:BASE+i.DsImagemSite}} />
+                                            <HeaderCategoriaDesc active={activeCategoria == i.DsGrupoProduto}>{i.DsGrupoProduto}</HeaderCategoriaDesc>
+                                    </HeaderCategoriaItem>
+                                </HeaderCategoriaAction>
+                            </HeaderCategoriaArea>
+                        ))}
+                    </HeaderCategoria>
                 </HeaderArea>
+            </ScrollArea>
         </Container>
     )
 }

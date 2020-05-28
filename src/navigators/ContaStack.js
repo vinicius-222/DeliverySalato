@@ -5,6 +5,7 @@ import Perfil from '../screens/Perfil';
 import Senha from '../screens/Senha';
 import Email from '../screens/Email';
 import Conta from '../screens/Conta';
+import Pedidos from '../screens/Pedidos';
 
 
 const ContaStack = createStackNavigator({
@@ -19,6 +20,9 @@ const ContaStack = createStackNavigator({
     },
     Email:{
         screen:Email
+    },
+    Pedidos:{
+        screen:Pedidos
     }
 },{
     defaultNavigationOptions:{

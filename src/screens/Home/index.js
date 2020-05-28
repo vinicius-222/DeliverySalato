@@ -15,7 +15,8 @@ import {
     Texto,
     AreaScroll,
     AreaMaps,
-    ButtonMaps
+    ButtonMaps,
+    ImageBackgroundArea
 } from './styled';
  
 const BASE = BASEAPIIMAGE;
@@ -122,27 +123,29 @@ const Home = (props) =>{
 
     return(
         <Container>
-            <AreaScroll>
-                <HeaderCategoria
-                    ref={MonthRef}
-                    horizontal={true}
-                    showsHorizontalScrollIndicator={false}
-                    decelerationRate="fast"
-                    snapToInterval={thirdW}
-                    contentContainerStyle={{}}
-                    onMomentumScrollEnd={handleScrollEnd}
-                >
-                    {LoadActive ? 
-                        <Loading /> 
-                    :
-                        <BodyArea>
-                            <Imagen height={widthImagemPlatform} source={{uri:'http://138.99.15.234:20003/images/WhatsApp%20Image%202019-09-19%20at%2016.49.26.jpeg'}}/>
-                            <Imagen height={widthImagemPlatform} source={{uri:'http://138.99.15.234:20003/images/WhatsApp%20Image%202019-09-19%20at%2016.49.26%20(1).jpeg'}}/>
-                            <Imagen height={widthImagemPlatform} source={{uri:'http://138.99.15.234:20003/images/WhatsApp%20Image%202019-09-19%20at%2016.49.26%20(2).jpeg'}}/>
-                        </BodyArea>
-                    }
-                </HeaderCategoria>
-            </AreaScroll>
+            <ImageBackgroundArea source={require('../../assets/images/fundo.png')}>
+                <AreaScroll>
+                    <HeaderCategoria
+                        ref={MonthRef}
+                        horizontal={true}
+                        showsHorizontalScrollIndicator={false}
+                        decelerationRate="fast"
+                        snapToInterval={thirdW}
+                        contentContainerStyle={{}}
+                        onMomentumScrollEnd={handleScrollEnd}
+                    >
+                        {LoadActive ? 
+                            <Loading /> 
+                        :
+                            <BodyArea>
+                                <Imagen height={widthImagemPlatform} source={{uri:'http://138.99.15.234:20003/images/WhatsApp%20Image%202019-09-19%20at%2016.49.26.jpeg'}}/>
+                                <Imagen height={widthImagemPlatform} source={{uri:'http://138.99.15.234:20003/images/WhatsApp%20Image%202019-09-19%20at%2016.49.26%20(1).jpeg'}}/>
+                                <Imagen height={widthImagemPlatform} source={{uri:'http://138.99.15.234:20003/images/WhatsApp%20Image%202019-09-19%20at%2016.49.26%20(2).jpeg'}}/>
+                            </BodyArea>
+                        }
+                    </HeaderCategoria>
+                </AreaScroll>
+            </ImageBackgroundArea>
         </Container>
     )   
 }

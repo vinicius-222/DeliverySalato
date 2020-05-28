@@ -106,7 +106,7 @@ const Perfil = (props) =>{
                 <HeaderArea onPress={()=>props.navigation.navigate('Email')} underlayColor='#EEE'>
                     <HeaderTitle>Email</HeaderTitle>
                 </HeaderArea>
-                <HeaderArea onPress={()=>props.navigation.navigate('Senha')} underlayColor='#EEE'>
+                <HeaderArea onPress={()=>props.navigation.navigate('Pedidos')} underlayColor='#EEE'>
                     <HeaderTitle>Pedidos</HeaderTitle>
                 </HeaderArea>
                 <HeaderArea onPress={()=>setModalVisible(true)} underlayColor='#EEE'>

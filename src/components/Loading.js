@@ -8,14 +8,16 @@ const LoadingArea = styled.View`
     top:0;
     right:0;
     bottom:0;
+    opacity:0.5;
     justify-content:center;
     align-items:center;
+    background-color:${props=>props.background};
 `;
 
-const Loading = () =>{
+const Loading = (props) =>{
     return(
-        <LoadingArea>
-            <ActivityIndicator size="large" color="#CCC"/>
+        <LoadingArea background={props.background ? props.background : 'transparent'}>
+            <ActivityIndicator  size="large" color="#CCC"/>
         </LoadingArea>
     )
 }

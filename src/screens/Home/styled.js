@@ -10,6 +10,10 @@ export const AreaScroll = styled.ScrollView`
 export const HeaderCategoria = styled.ScrollView`
     width:100%;
 `;
+export const ImageBackgroundArea = styled.ImageBackground`
+    flex:1;
+    background-color:#FFFAF0;
+`;
 export const BodyArea = styled.View`
     flex:1;
     justify-content:center;

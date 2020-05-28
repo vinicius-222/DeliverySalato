@@ -5,7 +5,7 @@ import Geocoder from 'react-native-geocoding';
 import Geolocation from '@react-native-community/geolocation';
 import { MapsAPI } from './config';
 
-// const URL = 'http://192.168.1.65';
+//const URL = 'http://192.168.1.65';
 const URL = 'http://138.99.15.234:20003';
 const BASEAPI = URL+'/backEndSalato/';
 export const BASEAPIIMAGE = URL+'/images/';
@@ -463,7 +463,7 @@ const useSalatoDeliveryAPI = (props) => ({
     updatePass:async (jwt, hash, email, pass, newPass) =>{
         const json = await apiFetchPost(
             '/user/updatePass',
-            {jwt,hash, email, pass, newPass},
+            {jwt, hash, email, pass, newPass},
             props
         )
         return json;
@@ -616,9 +616,18 @@ const useSalatoDeliveryAPI = (props) => ({
         const json = await apiFetchPut(
             '/cliente/ClienteDelivery',
             {jwt, hash, CdChamada, NmPessoa, CdCPF_CNPJ, DsTeleFoneCobranca, DsFaxCobranca, DtNascimento, TpEstadoCivil, NrIdentidade, TpSexo},
+            props
         
         )
+        return json;
+    },
 
+    getPedidosDelivery:async(jwt, hash) =>{
+        const json = await apiFetchGet(
+            '/pedidovenda/getPedidosDelivery',
+            {jwt, hash},
+            props
+        )
         return json;
     }
     

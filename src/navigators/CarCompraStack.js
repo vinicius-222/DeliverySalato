@@ -11,4 +11,7 @@ export default createAppContainer(createStackNavigator({
     Pagamento:{
         screen:Pagamento
     }
+},{ defaultNavigationOptions:{
+        gesturesEnabled:true
+    }
 }));

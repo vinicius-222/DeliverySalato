@@ -204,7 +204,8 @@ const Conta = (props) =>{
 Conta.navigationOptions = ()=>{
     return{
         headerShown:true,
-        headerTitle:'Perfil'
+        headerTitle:'Perfil',
+        gesturesEnabled:true
     }
 }
 

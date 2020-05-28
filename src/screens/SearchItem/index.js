@@ -54,6 +54,7 @@ const SearchItem = (props) => {
 
 SearchItem.navigationOptions = ({navigation}) => {
     return{
+        gesturesEnabled:true,
         headerTitle:<LocalizacaoProduto />,
         headerTitleContainerStyle:{
             backgroundColor:'#FFFFFF'

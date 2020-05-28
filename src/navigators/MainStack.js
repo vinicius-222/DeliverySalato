@@ -12,6 +12,7 @@ export default createAppContainer(createStackNavigator({
 }, {
     initialRouteName:'Preload',
     defaultNavigationOptions:{
-        header:null
+        header:null,
+        gesturesEnabled:true
     }
 }));

@@ -23,5 +23,7 @@ export default createAppContainer(createStackNavigator({
 },{
     defaultNavigationOptions:{
         headerShown:true,
+        gesturesEnabled:true
+        
     }
 }));

@@ -303,13 +303,11 @@ const InsertAddressModal = (props) => {
                         let key = listUf.findIndex((i)=> i.value == json.uf)
                         setCdUF(key);
                     }
-                   
+                    
                 }else{
-                    setCEPEndereco('Cep nao encontrado!!')
-                }
-                setTimeout(()=>{
+                    setCEPEndereco('Cep nao encontrado!!');
                     setLoading(false);
-                },500)
+                }
             }
         },1000)
 
@@ -325,6 +323,7 @@ const InsertAddressModal = (props) => {
                 const end = await api.getPositionEndereco(`${DsLogradouro} ${NrNumero}, ${DsBairro} - ${DsCidade} ${CdUF} ${DsCEP}`);
                 setcarregaLatLng(true);
                 setGeometry(end.geometry.location);
+                setLoading(false);
             }
         },1000)
         
@@ -385,12 +384,10 @@ const InsertAddressModal = (props) => {
             transparent={true}
             visible={props.visible}
         >   
-            
             <Safe>
                 <ScroollContainer>
                     <KeyBordoSafeArea>
                         <Container Platform={Platform}>
-                            {loading &&  <Loading />}
                             <HeaderArea>
                                 <ButtonActionClose onPress={()=>{
                                     LimpaCampos();
@@ -511,6 +508,7 @@ const InsertAddressModal = (props) => {
                         </Container>
                     </KeyBordoSafeArea>
                 </ScroollContainer>
+                {loading &&  <Loading background='#000'/>}
             </Safe>
         </ModalArea>
     )       

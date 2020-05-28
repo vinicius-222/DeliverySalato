@@ -20,4 +20,8 @@ export default createAppContainer(createStackNavigator({
         screen:Checkout,
         title:'Checkout'
     }
+},{
+    defaultNavigationOptions:{
+        gesturesEnabled:true
+    }
 }));

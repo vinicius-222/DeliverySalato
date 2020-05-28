@@ -35,12 +35,13 @@ const Senha = (props) => {
             return alert('Senhas nao conferem, por favor confira as senhas!!')
         }else{
             setLoading(true);
-            let r = await api.updatePass(props.jwt, props.hash, props.infoUsuario.InfoUsuario[0].DsEmailCobranca, pass, newPass);
+            let r = await api.updatePass(props.jwt, props.hash, props.infoUsuario[0].DsLogin, pass, newPass);
             if (!r.error){
                 props.setJwt(r.jwt);
                 LimpaSenhas();
                 alert(r.retorno);
                 setLoading(false);
+                props.navigation.goBack();
             }else{
                 alert(r.error);
                 setLoading(false);

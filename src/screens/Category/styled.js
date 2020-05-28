@@ -3,17 +3,14 @@ import styled from 'styled-components/native';
 export const Container = styled.SafeAreaView`
     flex:1;
 `;
-
-export const Scroll = styled.ScrollView`
-    width:100%;
-    height:100%;
+export const ScrollArea = styled.ScrollView`
+    flex:1;
 `;
 
 export const HeaderArea = styled.View`
     padding:15px;
-    background-color:#FFf;
-    height:270px;
-    width:100%;
+    background-color:#FFF;
+    flex:1;
 `;
 export const HeaderEnderecoTitle = styled.Text`
     font-size:16px;
@@ -26,8 +23,8 @@ export const HeaderCategoria = styled.View`
     align-items:center;
 `;
 
-export const HeaderCategoriaArea = styled.TouchableHighlight`
-    height:44%;
+export const HeaderCategoriaArea = styled.View`
+    height:160px;
     width:45%;
     justify-content:center;
     align-items:center;
@@ -41,6 +38,7 @@ export const HeaderCategoriaAction = styled.TouchableHighlight`
     align-items:center;    
     width:100%;
     height:100%;
+
 `;
 export const HeaderCategoriaTitle = styled.Text`
     font-size:20px;

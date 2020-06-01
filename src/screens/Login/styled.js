@@ -58,6 +58,19 @@ color:#FFF;
 font-size:18px;
 `;
 
+export const ActionLink = styled.TouchableHighlight`
+justify-content:center;
+align-items:center;
+width:auto;
+height:30px;
+margin:20px;
+
+`;
+export const ActionLinkText = styled.Text`
+color:#3574CB;
+font-size:14px;
+`;
+
 export const LoadingArea = styled.View`
 position:absolute;
 left:0;

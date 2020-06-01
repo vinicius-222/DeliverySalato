@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StatusBar, Platform, Text, ActivityIndicator } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
+import SendEmailSenha from '../../components/RecuperaSenha/SendEmailSenha'; 
 import useSalatoDeliveryAPI from '../../useSalatoDeliveryAPI';
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -15,7 +16,9 @@ import {
   Input,
   ActionButton,
   ActionButtonText,
-  LoadingArea
+  LoadingArea,
+  ActionLink,
+  ActionLinkText
 } from './styled';
 
 const Page = (props) => {
@@ -26,6 +29,7 @@ const Page = (props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [visible, setVisible] = useState(false);
 
   const handleSignIn = async () => {
     if(email && password) {
@@ -74,6 +78,10 @@ const Page = (props) => {
   return (
     <Container behavior={Platform.OS === 'ios'?'padding':null}>
       <StatusBar barStyle="light-content" />
+      <SendEmailSenha
+        visible={visible}
+        actionVisible={setVisible}
+      />
       <Header>
         <HeaderTitle source={require('../../assets/images/Logo.png')}/>
       </Header>
@@ -95,10 +103,16 @@ const Page = (props) => {
       <Input editable={!loading} value={password} onChangeText={t=>setPassword(t)} placeholder="Senha" placeholderTextColor="#999" secureTextEntry={true} />
 
       {activeMenu == 'signin' &&
-        <ActionButton disabled={loading} onPress={handleSignIn}>
-          <ActionButtonText>Login</ActionButtonText>
-        </ActionButton>
+        <>
+          <ActionButton disabled={loading} onPress={handleSignIn}>
+            <ActionButtonText>Login</ActionButtonText>
+          </ActionButton>
+          <ActionLink onPress={()=>setVisible(true)} underlayColor="transparent">
+            <ActionLinkText>Esqueceu a senha?</ActionLinkText>
+          </ActionLink>
+        </>
       }
+
 
       {activeMenu == 'signup' &&
         <ActionButton disabled={loading} onPress={handleSignUp}>

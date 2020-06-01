@@ -629,7 +629,15 @@ const useSalatoDeliveryAPI = (props) => ({
             props
         )
         return json;
-    }
+    },
+
+    insertRecuperaSenha:async(email) => {
+        const json = await apiFetchPost(
+            '/user/handleRecuperaSenha',
+            {email}
+        )
+        return json;
+    },
     
 });
 

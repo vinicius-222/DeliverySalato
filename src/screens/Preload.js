@@ -72,7 +72,7 @@ const Preload = (props) => {
     useEffect(()=>{
         setTimeout(() => {
             VerificaLogin();
-        }, 1000);
+        }, 500);
         
     })
 

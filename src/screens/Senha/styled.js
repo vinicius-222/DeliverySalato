@@ -45,6 +45,7 @@ export const Input = styled.TextInput`
 	fontSize:16px;
     marginRight:10px;
     marginLeft:10px;
+    color:#000;
 	padding:2px;
 	backgroundColor:transparent;
 	borderBottomColor:#CCCCCC;

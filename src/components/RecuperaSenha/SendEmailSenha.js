@@ -5,14 +5,25 @@ import useSalatoDeliveryAPI from '../../useSalatoDeliveryAPI';
 import Loading from '../Loading';
 
 const SafeArea = styled.SafeAreaView`
-    background-color:#FF0000;
     flex:1;
+`;
+const AreaOpacity = styled.View`
+    justify-content:flex-end;
+    align-items:flex-end;
+    background-color:#000;
+    opacity:0.3px;
+    height:70px;
 `;
 const KeyBordArea = styled.KeyboardAvoidingView`
     flex:1;
+    padding:0px;
 `;
 const ScrollArea = styled.ScrollView`
+    flex:1;
     background-color:#FFF;
+    border-radius:10px;
+    margin-top:-5px;
+
 `;
 const AreaContainer = styled.View`
     flex:1;
@@ -89,6 +100,7 @@ const SendEmailSenha = (props) => {
         if(!json.email){
             alert('Enviamos um e-mail para voçe com informções para redefinir a sua senha!!');
             setEmail('');
+            props.actionSetEmail(email);
         }else{
             alert(json.email);
         }
@@ -97,38 +109,37 @@ const SendEmailSenha = (props) => {
     return(
         <Modal
             animationType="slide"
-            transparent={false}
+            transparent={true}
             visible={props.visible}
         >
-            <SafeArea behavior={Platform.OS === 'ios'?'padding':null}> 
-                <KeyBordArea>
-                    <ScrollArea>
-                        <AreaContainer>
-                            <AreaTopo>
-                                <ImageLogo source={require('../../assets/images/Logo.png')} />
-                            </AreaTopo>
-                            <AreaBody>
-                                <EmailInput 
-                                    placeholder="E-mail"
-                                    value={email}
-                                    onChangeText={(e)=>setEmail(e)}
-                                    keyboardType="email-address"
-                                    autoCapitalize="none"
-                                />
-                                <ActionBtn onPress={()=>HandleRecuperaSenha()}>
-                                    <ActionBtnText>Enviar</ActionBtnText>
-                                </ActionBtn>
-                                <AreaBtnFechar>
-                                    <ActionBtnFechar onPress={()=>props.actionVisible(false)}>
-                                        <ActionBtnText>X</ActionBtnText>
-                                    </ActionBtnFechar>
-                                </AreaBtnFechar>
-                            </AreaBody>
-                        </AreaContainer>
-                    </ScrollArea>
-                </KeyBordArea>
-                {loading && <Loading background='#000'/>}
-            </SafeArea>
+            <KeyBordArea>
+                <AreaOpacity></AreaOpacity>
+                <ScrollArea>
+                    <AreaContainer>
+                        <AreaTopo>
+                            <ImageLogo source={require('../../assets/images/Logo.png')} />
+                        </AreaTopo>
+                        <AreaBody>
+                            <EmailInput 
+                                placeholder="E-mail"
+                                value={email}
+                                onChangeText={(e)=>setEmail(e)}
+                                keyboardType="email-address"
+                                autoCapitalize="none"
+                            />
+                            <ActionBtn onPress={()=>HandleRecuperaSenha()}>
+                                <ActionBtnText>Enviar</ActionBtnText>
+                            </ActionBtn>
+                            <AreaBtnFechar>
+                                <ActionBtnFechar onPress={()=>props.actionVisible(false)}>
+                                    <ActionBtnText>X</ActionBtnText>
+                                </ActionBtnFechar>
+                            </AreaBtnFechar>
+                        </AreaBody>
+                    </AreaContainer>
+                </ScrollArea>
+            </KeyBordArea>
+            {loading && <Loading background='#000'/>}
         </Modal>
     )
 }

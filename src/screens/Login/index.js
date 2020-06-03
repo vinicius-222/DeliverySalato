@@ -81,6 +81,7 @@ const Page = (props) => {
       <SendEmailSenha
         visible={visible}
         actionVisible={setVisible}
+        actionSetEmail={setEmail}
       />
       <Header>
         <HeaderTitle source={require('../../assets/images/Logo.png')}/>

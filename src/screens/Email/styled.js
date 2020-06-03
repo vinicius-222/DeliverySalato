@@ -32,14 +32,15 @@ export const Line = styled.View`
 `;
 export const TextInf = styled.Text`
     fontSize:14px;
-    color:#CCCCCC;
+    color:#000;
     marginTop:5px;
     marginLeft:10px;
 `;
 export const Input = styled.TextInput`
     height:30px;
 	backgroundColor:#DDDDDD;
-	fontSize:16px;
+    fontSize:16px;
+    color:#000;
     marginRight:10px;
     marginLeft:10px;
 	padding:2px;

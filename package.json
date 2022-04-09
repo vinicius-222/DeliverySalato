@@ -15,7 +15,7 @@
     "date-fns": "^2.5.0",
     "date-fns-tz": "^1.0.8",
     "firebase": "^7.2.0",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "qs-stringify": "^1.2.0",
     "react": "16.9.0",
     "react-native": "0.61.5",
